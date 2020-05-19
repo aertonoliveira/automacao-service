@@ -38,11 +38,11 @@ class MailResetPasswordNotification extends ResetPassword
     {
         $frontendLink = config('url.frontend_url') . '/password/reset?token=' . $this->token;
         return ( new MailMessage )
-            ->subject( 'Reset Password Notification' )
-            ->line( "Hello! You are receiving this email because we received a password reset request for your account." )
-            ->action( 'Reset Password', $frontendLink )
-            ->line( "This password reset link will expire in ".config('auth.passwords.users.expire')." minutes" )
-            ->line( "If you did not request a password reset, no further action is required." );    }
+            ->subject( 'Alteração de senha' )
+            ->line( "Olá! Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta." )
+            ->action( 'Redefinir senha', $frontendLink )
+            ->line( "Este link de redefinição de senha expirará em ".config('auth.passwords.users.expire')." minutos" )
+            ->line( "Se você não solicitou uma redefinição de senha, nenhuma ação adicional será necessária." );    }
     /**
      * Get the array representation of the notification.
      *

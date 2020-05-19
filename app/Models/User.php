@@ -29,7 +29,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'password', 'remember_token',
     ];
 
-    
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -49,12 +49,17 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return [];
     }
-    
+
     /**
      * Override the mail body for reset password notification mail.
      */
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(\App\Models\Role::class);
     }
 }

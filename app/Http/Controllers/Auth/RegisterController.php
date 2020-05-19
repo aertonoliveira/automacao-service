@@ -14,10 +14,10 @@ use App\Notifications\UserVerifyNotification;
 class RegisterController extends Controller
 {
     use RegistersUsers;
-    
+
     /**
      * Register
-     * 
+     *
      * @param RegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
@@ -37,7 +37,10 @@ class RegisterController extends Controller
         // Transform user data
         $data = new UserResource($user);
 
+        $test = config('url.account_verify');
+
         // Validate if user needs to verify their account
+        echo config('url.account_verify');
         if(config('url.account_verify')){
             // Email Verification
             $user->notify(new UserVerifyNotification($token));
@@ -45,7 +48,7 @@ class RegisterController extends Controller
             return response()->json(compact('data'));
         }
 
-        return response()->json(compact('token', 'data'));
+        return response()->json(compact('token', 'data', 'test'));
 
     }
 }

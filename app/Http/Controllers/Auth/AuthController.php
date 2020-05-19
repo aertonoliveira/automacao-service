@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\User;
+
 use Carbon\Carbon;
 use Illuminate\Hashing\BcryptHasher;
 use App\Http\Resources\User as UserResource;
@@ -14,7 +15,7 @@ class AuthController extends Controller
 {
     /**
      * Login
-     * 
+     *
      * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
@@ -28,7 +29,7 @@ class AuthController extends Controller
         if(!$user) return response()->json(['error' => 'User not found.'], 404);
 
         // Account verification validation
-        if(config('url.account_verify')){
+        if(!config('url.account_verify')){
             if(!$user->email_verified_at) return response()->json(['error' => 'Account must be verified'], 401);
         }
         // Account Validation
@@ -48,14 +49,18 @@ class AuthController extends Controller
 
             }
         } catch (JWTException $e) {
-            // Return Error message if cannot create token. 
+            // Return Error message if cannot create token.
             return response()->json(['error' => 'could_not_create_token'], 500);
 
         }
-        
+
         // transform user data
         $data = new UserResource($user);
+        $result = User::with('roles.permission')->where('id', $user->id)->get();
+        $permissao = $result[0]['roles'][0]['permission'];
 
-        return response()->json(compact('token', 'data'));
+        return response()->json(compact('token', 'data','permissao'));
+
+
     }
 }
