@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'email_verified_at',
+        'name', 'email', 'password', 'email_verified_at','user_parent_id'
     ];
 
     /**
@@ -61,5 +61,15 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(\App\Models\Role::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\User', 'user_parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('App\User', 'user_parent_id');
     }
 }
