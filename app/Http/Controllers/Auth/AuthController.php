@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 
-use Carbon\Carbon;
 use Illuminate\Hashing\BcryptHasher;
 use App\Http\Resources\User as UserResource;
 
@@ -26,17 +25,17 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Return error message if user not found.
-        if(!$user) return response()->json(['error' => 'User not found.'], 404);
+        if(!$user) return response()->json(['error' => 'Usuário não encontrado.'], 404);
 
-        // Account verification validation
-        if(!config('url.account_verify')){
-            if(!$user->email_verified_at) return response()->json(['error' => 'Account must be verified'], 401);
-        }
         // Account Validation
         if (!(new BcryptHasher)->check($request->input('password'), $user->password)) {
             // Return Error message if password is incorrect
-            return response()->json(['error' => 'Email or password is incorrect. Authentication failed.'], 401);
+            return response()->json(['error' => 'E-mail ou senha está incorreto. A autenticação falhou.'], 401);
         }
+
+        // Account verification validation
+        if(!$user->ativo) return response()->json(['error' => 'Favor aguardar sua ativação'], 401);
+
 
         // Get email and password from Request
         $credentials = $request->only('email', 'password');
@@ -57,7 +56,11 @@ class AuthController extends Controller
         // transform user data
         $data = new UserResource($user);
         $result = User::with('roles.permission')->where('id', $user->id)->get();
-        $permissao = $result[0]['roles'][0]['permission'];
+
+        $permissao = [];
+        if(count($result[0]['roles']) > 0){
+            $permissao = $result[0]['roles'][0]['permission'];
+        }
 
         return response()->json(compact('token', 'data','permissao'));
 

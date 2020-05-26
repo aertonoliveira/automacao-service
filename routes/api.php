@@ -2,19 +2,6 @@
 
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-
-
 Route::group(['namespace' => 'Auth'], function () {
 
     Route::post('auth/login', ['as' => 'login', 'uses' => 'AuthController@login']);
@@ -65,6 +52,18 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 
     });
 });
+
+
+Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
+    Route::group(['namespace' => 'Clientes'], function () {
+        Route::post('cliente', 'ClientesController@create');
+        Route::patch('ativa_cliente', 'ClientesController@ativaCliente');
+
+
+    });
+});
+
+
 
 
 
