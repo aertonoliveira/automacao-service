@@ -45,5 +45,10 @@ class ContratoMutuoController extends Controller
         }
     }
 
+    public function listProdutos(){
+        $resultContratos = ContratoMutuo::with('user')->paginate(10);
+
+        return response()->json($resultContratos, 200);
+    }
 
 }

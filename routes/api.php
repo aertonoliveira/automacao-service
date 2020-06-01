@@ -61,12 +61,15 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
         Route::get('cliente/buscarPorParent/{id}', 'ClientesController@buscarPorParent');
         Route::patch('ativa_cliente', 'ClientesController@ativaCliente');
         Route::patch('cliente/saudo', 'ClientesController@ativaCliente');
+        Route::post('cliente/documentos', 'DocumentosClientesController@create');
+        Route::get('cliente/documentos/{id}', 'DocumentosClientesController@listDocumentos');
     });
 });
 
 Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     Route::group(['namespace' => 'Produtos'], function () {
         Route::post('produto', 'ContratoMutuoController@create');
+        Route::get('produto', 'ContratoMutuoController@listProdutos');
     });
 });
 
