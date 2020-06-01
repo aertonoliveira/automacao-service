@@ -30,5 +30,6 @@ class AlterUser extends Migration
             $table->dropForeign('role_id_foreign');
             $table->dropColumn('role_id');
         });
+
     }
 }
