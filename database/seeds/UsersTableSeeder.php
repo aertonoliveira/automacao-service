@@ -17,6 +17,8 @@ class UsersTableSeeder extends Seeder
             'email'             => 'admin@admin.com',
             'password'          => Hash::make('1234'),
             'ativo'             => true,
+            'role_id'             => 1,
+
         ]);
 
 
@@ -25,6 +27,7 @@ class UsersTableSeeder extends Seeder
             'email'             => 'user@user.com',
             'password'          => Hash::make('1234'),
             'ativo'             => true,
+            'role_id'             => 2,
         ]);
 
     }
