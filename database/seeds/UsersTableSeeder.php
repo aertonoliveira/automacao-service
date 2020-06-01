@@ -16,6 +16,7 @@ class UsersTableSeeder extends Seeder
             'name'              => 'Admin User',
             'email'             => 'admin@admin.com',
             'password'          => Hash::make('1234'),
+            'ativo'             => true,
         ]);
 
 
@@ -23,6 +24,7 @@ class UsersTableSeeder extends Seeder
             'name'              => 'John Doe',
             'email'             => 'user@user.com',
             'password'          => Hash::make('1234'),
+            'ativo'             => true,
         ]);
 
     }
