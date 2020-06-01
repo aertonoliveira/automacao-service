@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Clientes;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\User as UserResource;
+use App\Models\Role;
+use App\Models\SaldoConta;
 use App\Notifications\UserVerifyNotification;
 use App\User;
 use Illuminate\Hashing\BcryptHasher;
@@ -21,29 +23,33 @@ class ClientesController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input['user_parent_id'] = $userAuth->id;
+
+        $userAuth = Auth::user();
+
+        $roleResult = Role::where('id', $userAuth->id)->first();
+        $result = Role::where('name',$input['role_id'])->first();
+        $input['role_id'] = $result->id;
+
         $user = User::create($input);
 
         DB::table('role_user')->insert([
             'user_id' =>  $user->id,
             'role_id' =>  $input['role_id']
         ]);
-        //  Generate token
-        $token = auth()->fromUser($user);
 
-        // Transform user data
-        $data = new UserResource($user);
+        $saldo['user_id'] = $user->id;
+        $saldo['valor'] = 0;
+        SaldoConta::create($saldo);
 
-        $test = config('url.account_verify');
 
-        // Validate if user needs to verify their account
         if(config('url.account_verify')){
             // Email Verification
-            $user->notify(new UserVerifyNotification($token));
+            $user->notify(new UserVerifyNotification( $input['email'], $input['password']));
 
-            return response()->json(compact('data'));
+            return response()->json($user, 200);
         }
 
-        return response()->json(compact('token', 'data', 'test'));
+        return response()->json($user, 200);
 
     }
 
@@ -69,5 +75,16 @@ class ClientesController extends Controller
         }
 
 
+    }
+
+    public function index(Request $request, $tipo){
+        $roleResult = Role::where('name',$tipo)->first();
+        $userResult = User::with('roles','parent')->where('role_id',$roleResult->id)->paginate(10);
+        return response()->json($userResult, 200);
+    }
+
+    public function buscarPorParent(Request $request, $id){
+        $userResult = User::with('roles','parent')->where('user_parent_id',$id)->paginate(10);
+        return response()->json($userResult, 200);
     }
 }

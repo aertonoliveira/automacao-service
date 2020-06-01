@@ -21,7 +21,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'rg', 'data_emissao', 'orgao_emissor', 'cpf', 'data_nascimento',
         'estado_civil', 'nome_mae',  'genero', 'profissao', 'rua', 'numero',
         'bairro', 'cidade', 'estado', 'complemento', 'cep', 'telefone',
-        'celular',
+        'celular','role_id'
     ];
 
     /**
@@ -65,6 +65,36 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(\App\Models\Role::class);
+    }
+
+    public function saldoConta()
+    {
+        return $this->hasMany('App\Models\SaldoConta', 'user_id', 'id');
+    }
+
+    public function metaCliente()
+    {
+        return $this->hasMany('App\Models\MetaCliente', 'user_id', 'id');
+    }
+
+    public function comissao()
+    {
+        return $this->hasMany('App\Models\Comissao', 'user_id', 'id');
+    }
+
+    public function documentosClientes()
+    {
+        return $this->hasMany('App\Models\DocumentosClientes', 'user_id', 'id');
+    }
+
+    public function comissaoParent()
+    {
+        return $this->hasMany('App\Models\Comissao', 'parent_id', 'id');
+    }
+
+    public function contratoMutuo()
+    {
+        return $this->hasMany('App\Models\ContratoMutuo', 'parent_id', 'id');
     }
 
     public function parent()

@@ -54,7 +54,7 @@ class AuthController extends Controller
         }
 
         // transform user data
-        $data = new UserResource($user);
+        $data = User::with('roles','parent')->where('id', $user->id)->first();
         $result = User::with('roles.permission')->where('id', $user->id)->get();
 
         $permissao = [];
