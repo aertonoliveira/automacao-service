@@ -27,27 +27,48 @@ class ContratoMutuoController extends Controller
         $contaResult->valor =  $total;
         $contaResult->save();
 
-        if ($roleResult->name === 'Administrator') {
+        if ($roleResult->name === 'Administrator' ) {
             ContratoMutuo::create($input);
         } else {
-            $input['porcentagem'] = $this->calculaComissao($input['valor']);
+            $input['porcentagem'] = $this->calculaComissao($input['valor'], $input['porcentagem']);
+
             ContratoMutuo::create($input);
         }
 
     }
 
-    public function calculaComissao($valor)
+    public function calculaComissao($valor,$porcentagem)
     {
         if ($valor >= 1000 && $valor <= 5000) {
-            return 7;
+            if($porcentagem > 7){
+                return 7;
+            }else{
+                return $porcentagem;
+            }
         } else if ($valor <= 6000 && $valor <= 10000) {
-            return 6;
+            if($porcentagem > 6){
+                return 6;
+            }else{
+                return $porcentagem;
+            }
         } else if ($valor >= 11000 && $valor <= 20000) {
-            return 5;
+            if($porcentagem > 5){
+                return 5;
+            }else{
+                return $porcentagem;
+            }
         } else if ($valor >= 21000 && $valor <= 50000) {
-            return 4;
+            if($porcentagem > 4){
+                return 4;
+            }else{
+                return $porcentagem;
+            }
         } else if ($valor >= 51000) {
-            return 3;
+            if($porcentagem > 3){
+                return 3;
+            }else{
+                return $porcentagem;
+            }
         }
     }
 

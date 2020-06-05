@@ -83,14 +83,31 @@ class ClientesController extends Controller
     }
 
     public function index(Request $request, $tipo){
+        $userAuth = Auth::user();
         $roleResult = Role::where('name',$tipo)->first();
-        $userResult = User::with('roles','parent','saldoConta')->where('role_id',$roleResult->id)->paginate(10);
-        return response()->json($userResult, 200);
+
+        $result = User::with('roles')->where('id', $userAuth->id)->get();
+        if ($result[0]['roles'][0]['name'] === "Administrador"){
+            $userResult = User::with('roles','parent','saldoConta')->where('role_id',$roleResult->id)->paginate(10);
+            return response()->json($userResult, 200);
+        }else{
+            $userResult = User::with('roles','parent','saldoConta')->where(['role_id'=>$roleResult->id, 'user_parent_id'=>  $userAuth->id ])->paginate(10);
+            return response()->json($userResult, 200);
+        }
+
     }
 
     public function buscarPorParent(Request $request, $id){
-        $userResult = User::with('roles','parent','saldoConta')->where('user_parent_id',$id)->paginate(10);
-        return response()->json($userResult, 200);
+        $userAuth = Auth::user();
+        $result = User::with('roles')->where('id', $userAuth->id)->get();
+        if ($result[0]['roles'][0]['name'] === "Administrador"){
+            $userResult = User::with('roles','parent','saldoConta')->where('user_parent_id',$id)->paginate(10);
+            return response()->json($userResult, 200);
+        }else{
+            $userResult = User::with('roles','parent','saldoConta')->where('user_parent_id',$id)->paginate(10);
+            return response()->json($userResult, 200);
+        }
+
     }
 
     public function obterCliente(Request $request, $id){
