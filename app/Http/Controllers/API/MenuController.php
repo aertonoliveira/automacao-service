@@ -26,14 +26,7 @@ class MenuController extends Controller
      */
     public function create(Request $request)
     {
-//        $validator = $request->validate([
-//            'nome' => 'string',
-//            'cadapio_id'
-//        ]);
-
-
         $input = $request->all();
-
         $resultCreate = Menu::create($input);
         $cardapiocategoria = Menu::findOrFail($resultCreate->id);
 

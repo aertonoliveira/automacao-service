@@ -4,22 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContratoMutuo extends Model
+class ContaBancaria extends Model
 {
     protected $fillable = [
         'id',
-        'porcentagem',
-        'valor',
-        'tempo_contrato',
-        'tipo_contrato',
-        'tipo_contato',
-        'inicio_mes',
-        'final_mes',
-        'ativo',
+        'numero_conta',
+        'tipo_conta',
+        'agencia',
+        'banco_id',
         'user_id'
     ];
 
     public function user(){
         return $this->belongsTo('App\User','user_id', 'id');
+    }
+
+    public function banco(){
+        return $this->belongsTo('App\Models\Bancos','banco_id', 'id');
     }
 }

@@ -53,7 +53,9 @@ class DocumentosClientesController extends Controller
 
 
 
-        $resultCreate = DocumentosClientes::create($input);
+        $resultCreate = DocumentosClientes::updateOrCreate(['user_id' =>$input['user_id']], $input);
+
+        return response()->json($resultCreate, 200);
 
     }
 

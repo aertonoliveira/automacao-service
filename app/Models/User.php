@@ -87,6 +87,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany('App\Models\DocumentosClientes', 'user_id', 'id');
     }
 
+
+    public function contaBancaria()
+    {
+        return $this->hasMany('App\Models\contaBancaria', 'user_id', 'id');
+    }
+
     public function comissaoParent()
     {
         return $this->hasMany('App\Models\Comissao', 'parent_id', 'id');
@@ -94,7 +100,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function contratoMutuo()
     {
-        return $this->hasMany('App\Models\ContratoMutuo', 'parent_id', 'id');
+        return $this->hasMany('App\Models\ContratoMutuo', 'user_id', 'id');
     }
 
     public function parent()

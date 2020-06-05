@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Produtos;
 
 use App\Models\ContratoMutuo;
 use App\Models\Role;
+use App\Models\SaldoConta;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +22,10 @@ class ContratoMutuoController extends Controller
         $datetime = Carbon::now('America/Sao_Paulo');
         $input['inicio_mes'] = $datetime->format('Y-m-d H:i:s');
         $input['final_mes'] = date("Y-m-d H:i:s", strtotime($input['tempo_contrato'] . ' month'));
+        $contaResult = SaldoConta::where('user_id',$input['user_id'])->first();
+        $total = $contaResult->valor + $input['valor'];
+        $contaResult->valor =  $total;
+        $contaResult->save();
 
         if ($roleResult->name === 'Administrator') {
             ContratoMutuo::create($input);
@@ -47,8 +53,13 @@ class ContratoMutuoController extends Controller
 
     public function listProdutos(){
         $resultContratos = ContratoMutuo::with('user')->paginate(10);
-
-        return response()->json($resultContratos, 200);
+        return response()->json(['data' => $resultContratos], 201);
     }
+
+    public function listProdutosCliente($id){
+        $resultContratos = ContratoMutuo::where('user_id', $id)->paginate(10);
+        return response()->json(['data' => $resultContratos], 201);
+    }
+
 
 }
