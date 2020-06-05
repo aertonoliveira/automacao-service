@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -28,6 +29,11 @@ class UsersTableSeeder extends Seeder
             'password'          => Hash::make('1234'),
             'ativo'             => true,
             'role_id'             => 2,
+        ]);
+
+        DB::table('role_user')->insert([
+            'user_id' =>  1,
+            'role_id' =>  1
         ]);
 
     }
