@@ -90,7 +90,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function contaBancaria()
     {
-        return $this->hasMany('App\Models\contaBancaria', 'user_id', 'id');
+        return $this->hasMany('App\Models\ContaBancaria', 'user_id', 'id');
     }
 
     public function comissaoParent()
