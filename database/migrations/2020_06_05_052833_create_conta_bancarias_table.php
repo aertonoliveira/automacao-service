@@ -22,7 +22,7 @@ class CreateContaBancariasTable extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('banco_id')->unsigned()->nullable();
-            $table->foreign('banco_id')->references('id')->on('bancosn');
+            $table->foreign('banco_id')->references('id')->on('bancos');
             $table->timestamps();
         });
     }
