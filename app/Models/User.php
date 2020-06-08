@@ -21,7 +21,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'rg', 'data_emissao', 'orgao_emissor', 'cpf', 'data_nascimento',
         'estado_civil', 'nome_mae',  'genero', 'profissao', 'rua', 'numero',
         'bairro', 'cidade', 'estado', 'complemento', 'cep', 'telefone',
-        'celular','role_id'
+        'celular','role_id','avatar'
     ];
 
     /**

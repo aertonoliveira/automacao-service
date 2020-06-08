@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Clientes;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\User as UserResource;
+use App\Models\DocumentosClientes;
 use App\Models\Role;
 use App\Models\SaldoConta;
 use App\Notifications\UserVerifyNotification;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -141,5 +143,29 @@ class ClientesController extends Controller
 
     public function getRelatorioClientes(){
         $resultUser = User::all();
+    }
+
+    public function imagemCliente(Request $request){
+        $userAuth = Auth::user();
+        $date = Carbon::now();
+        $name = uniqid(date('HisYmd'));
+
+        $input = $request->all();
+
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            $extension = $request->avatar->extension();
+            $nameFile = "avatar.{$extension}";
+            $request->avatar->storeAs('imagens/perfil/'. $userAuth->id . '/'  . $date->month . '/' . $date->day, $nameFile);
+            $input['avatar'] = 'storage/imagens/perfil/'. $userAuth->id . '/'   . $date->month . '/' . $date->day . '/' . $nameFile;
+        } else {
+            return response()->json(['error' => 'Favor enviar somente imagens '], 409);
+        }
+
+
+
+
+        $resultCreate = User::updateOrCreate(['id' => $userAuth->id], $input);
+
+        return response()->json($resultCreate, 200);
     }
 }
