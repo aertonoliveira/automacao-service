@@ -19,20 +19,28 @@ class ContratoMutuoController extends Controller
 
         $roleResult = Role::where('id', $userAuth->id)->first();
         $input = $request->all();
+
         $datetime = Carbon::now('America/Sao_Paulo');
         $input['inicio_mes'] = $datetime->format('Y-m-d H:i:s');
         $input['final_mes'] = date("Y-m-d H:i:s", strtotime($input['tempo_contrato'] . ' month'));
         $contaResult = SaldoConta::where('user_id',$input['user_id'])->first();
+//        var_dump($input['user_id']);
+//        dd( $contaResult);
         $total = $contaResult->valor + $input['valor'];
+
         $contaResult->valor =  $total;
         $contaResult->save();
 
         if ($roleResult->name === 'Administrator' ) {
-            ContratoMutuo::create($input);
+            $resultCreate = ContratoMutuo::create($input);
+            $resultCreate['numero_contrato'] = str_pad($resultCreate->id, 6, 0, STR_PAD_RIGHT);
+            $resultCreate->save();
         } else {
             $input['porcentagem'] = $this->calculaComissao($input['valor'], $input['porcentagem']);
 
-            ContratoMutuo::create($input);
+            $resultCreate = ContratoMutuo::create($input);
+            $resultCreate['numero_contrato'] = str_pad($resultCreate->id, 6, 0, STR_PAD_RIGHT);
+            $resultCreate->save();
         }
 
     }
@@ -83,4 +91,9 @@ class ContratoMutuoController extends Controller
     }
 
 
+    public function contratosClientesLogado(){
+        $userAuth = Auth::user();
+        $resultContratos = ContratoMutuo::where('user_id', $userAuth->id)->get();
+        return response()->json(['data' => $resultContratos], 201);
+    }
 }

@@ -59,6 +59,8 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     Route::group(['namespace' => 'Clientes'], function () {
         Route::post('cliente', 'ClientesController@create');
+        Route::put('cliente/{id}', 'ClientesController@update');
+        Route::get('cliente', 'ClientesController@getCliente');
         Route::post('cliente/contabancaria', 'ContaBancariaController@create');
         Route::get('cliente/buscarid/{id}', 'ClientesController@obterCliente');
         Route::get('cliente/{tipo}', 'ClientesController@index');
@@ -74,6 +76,7 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     Route::group(['namespace' => 'Produtos'], function () {
         Route::post('produto', 'ContratoMutuoController@create');
         Route::get('produto', 'ContratoMutuoController@listProdutos');
+        Route::get('produto/cliente', 'ContratoMutuoController@contratosClientesLogado');
         Route::get('produto/{id}', 'ContratoMutuoController@listProdutosCliente');
     });
 });

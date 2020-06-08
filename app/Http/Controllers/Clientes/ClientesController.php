@@ -53,6 +53,24 @@ class ClientesController extends Controller
 
     }
 
+    public function update(Request $request,$id){
+        $input = $request->all();
+        $user = User::find($id);
+        $result = Role::where('name',$input['role_id'])->first();
+        $input['role_id'] = $result->id;
+
+        if (!$input["password"]) {
+            $input["password"] = $user->password;
+        } else {
+            $input["password"] = bcrypt($input['password']);
+        }
+
+
+
+        $user->update($input);
+        return response()->json(['success' => 'ok'], 200);
+    }
+
     public function ativaCliente(Request $request)
     {
         $userAuth = Auth::user();
@@ -112,6 +130,12 @@ class ClientesController extends Controller
 
     public function obterCliente(Request $request, $id){
         $userResult = User::with('roles','parent','saldoConta','documentosClientes','contratoMutuo','contaBancaria.banco')->where('id',$id)->first();
+        return response()->json($userResult, 200);
+    }
+
+    public function getCliente(){
+        $userAuth = Auth::user();
+        $userResult = User::with('roles','parent','saldoConta','documentosClientes','contratoMutuo','contaBancaria.banco')->where('id',$userAuth->id)->first();
         return response()->json($userResult, 200);
     }
 }
