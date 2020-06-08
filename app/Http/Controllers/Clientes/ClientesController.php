@@ -138,4 +138,8 @@ class ClientesController extends Controller
         $userResult = User::with('roles','parent','saldoConta','documentosClientes','contratoMutuo','contaBancaria.banco')->where('id',$userAuth->id)->first();
         return response()->json($userResult, 200);
     }
+
+    public function getRelatorioClientes(){
+        $resultUser = User::all();
+    }
 }
