@@ -22,7 +22,9 @@ class ClientesController extends Controller
     public function create(Request $request)
     {
         $userAuth = Auth::user();
+
         $input = $request->all();
+
         $input['password'] = bcrypt($input['password']);
         $input['user_parent_id'] = $userAuth->id;
 
@@ -30,6 +32,7 @@ class ClientesController extends Controller
 
         $roleResult = Role::where('id', $userAuth->id)->first();
         $result = Role::where('name',$input['role_id'])->first();
+
         $input['role_id'] = $result->id;
 
         $user = User::create($input);
@@ -142,7 +145,10 @@ class ClientesController extends Controller
     }
 
     public function getRelatorioClientes(){
-        $resultUser = User::all();
+        $resultUser['senior'] = User::where('role_id',4)->count();
+        $resultUser['pleno'] = User::where('role_id',5)->count();
+        $resultUser['clientes'] = User::where('role_id',6)->count();
+        return response()->json($resultUser, 200);
     }
 
     public function imagemCliente(Request $request){

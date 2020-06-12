@@ -59,15 +59,15 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     Route::group(['namespace' => 'Clientes'], function () {
         Route::post('cliente', 'ClientesController@create');
+        Route::get('cliente', 'ClientesController@getRelatorioClientes');
         Route::post('cliente/perfil', 'ClientesController@imagemCliente');
         Route::put('cliente/{id}', 'ClientesController@update');
-        Route::get('cliente', 'ClientesController@getCliente');
         Route::post('cliente/contabancaria', 'ContaBancariaController@create');
         Route::get('cliente/buscarid/{id}', 'ClientesController@obterCliente');
         Route::get('cliente/{tipo}', 'ClientesController@index');
         Route::get('cliente/buscarPorParent/{id}', 'ClientesController@buscarPorParent');
         Route::post('ativa_cliente', 'ClientesController@ativaCliente');
-
+        Route::get('cliente/relatorios', 'ClientesController@getRelatorioClientes');
         Route::post('cliente/documentos', 'DocumentosClientesController@create');
         Route::get('cliente/documentos/{id}', 'DocumentosClientesController@listDocumentos');
     });
