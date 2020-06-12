@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return [
-        'app' => 'Laravel 6 API Boilerplate',
+        'app' => 'Laravel 6 API Automacao',
         'version' => '1.0.0',
     ];
 });
