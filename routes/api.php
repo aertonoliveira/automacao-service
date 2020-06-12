@@ -59,7 +59,7 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     Route::group(['namespace' => 'Clientes'], function () {
         Route::post('cliente', 'ClientesController@create');
-        Route::get('cliente', 'ClientesController@getRelatorioClientes');
+        Route::get('cliente', 'ClientesController@getCliente');
         Route::post('cliente/perfil', 'ClientesController@imagemCliente');
         Route::put('cliente/{id}', 'ClientesController@update');
         Route::post('cliente/contabancaria', 'ContaBancariaController@create');
