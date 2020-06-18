@@ -148,6 +148,8 @@ class ClientesController extends Controller
         $resultUser['senior'] = User::where('role_id',4)->count();
         $resultUser['pleno'] = User::where('role_id',5)->count();
         $resultUser['clientes'] = User::where('role_id',6)->count();
+        $resultUser['valor_total'] = DB::table("contrato_mutuos")->get()->sum("valor");
+
         return response()->json($resultUser, 200);
     }
 

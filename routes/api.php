@@ -67,7 +67,7 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
         Route::get('cliente/{tipo}', 'ClientesController@index');
         Route::get('cliente/buscarPorParent/{id}', 'ClientesController@buscarPorParent');
         Route::post('ativa_cliente', 'ClientesController@ativaCliente');
-        Route::get('cliente/relatorios', 'ClientesController@getRelatorioClientes');
+        Route::get('relatorios', 'ClientesController@getRelatorioClientes');
         Route::post('cliente/documentos', 'DocumentosClientesController@create');
         Route::get('cliente/documentos/{id}', 'DocumentosClientesController@listDocumentos');
     });
