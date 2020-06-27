@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Produtos;
 
+use App\Utils\Helper;
 use App\Models\ContratoMutuo;
 use App\Models\Role;
 use App\Models\SaldoConta;
@@ -24,8 +25,6 @@ class ContratoMutuoController extends Controller
         $input['inicio_mes'] = $datetime->format('Y-m-d H:i:s');
         $input['final_mes'] = date("Y-m-d H:i:s", strtotime($input['tempo_contrato'] . ' month'));
         $contaResult = SaldoConta::where('user_id',$input['user_id'])->first();
-//        var_dump($input['user_id']);
-//        dd( $contaResult);
         $total = $contaResult->valor + $input['valor'];
 
         $contaResult->valor =  $total;
@@ -81,8 +80,17 @@ class ContratoMutuoController extends Controller
     }
 
     public function listProdutos(){
-        $resultContratos = ContratoMutuo::with('user')->paginate(10);
-        return response()->json(['data' => $resultContratos], 201);
+        if( Helper::getUsuarioAuthTipo() === "Administrador" ||  Helper::getUsuarioAuthTipo() === "Diretor" ||  Helper::getUsuarioAuthTipo() === "Gestor de analista"){
+            $resultContratos = ContratoMutuo::with('user')->paginate(10);
+            return response()->json(['data' => $resultContratos], 201);
+        }else if(Helper::getUsuarioAuthTipo() === "Analista Senior" ||  Helper::getUsuarioAuthTipo() === "Analista pleno"){
+            $resultContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioAuthParent())->paginate(10);
+            return response()->json(['data' => $resultContratos], 201);
+        }else{
+            $resultContratos = ContratoMutuo::with('user')->where('user_id', Helper::getUsuarioAuthId())->paginate(10);
+            return response()->json(['data' => $resultContratos], 201);
+        }
+
     }
 
     public function listProdutosCliente($id){
