@@ -36,8 +36,10 @@ class Helper extends Controller
 
     static function retornaQuantidadeDias($mes, $ano){
 
-        $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano); // 31
-        return $dias;
+        $ultimo_dia = date("t", mktime(0,0,0,$mes,'01',$ano)); // Mágica, plim!
+
+
+        return $ultimo_dia;
     }
 
     static function dividirDiasPorPorcentagem($quantidadeDiasMes, $porcentagem, $diasRestantes){
