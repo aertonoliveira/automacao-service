@@ -32,4 +32,27 @@ class Helper extends Controller
         $userAuth = Auth::user();
         return $userAuth->id;
     }
+
+
+    static function retornaQuantidadeDias($mes, $ano){
+
+        $dias = cal_days_in_month(CAL_GREGORIAN, $mes, $ano); // 31
+        return $dias;
+    }
+
+    static function dividirDiasPorPorcentagem($quantidadeDiasMes, $porcentagem, $diasRestantes){
+        $result = $porcentagem/$quantidadeDiasMes;
+        $diasCorreto = $quantidadeDiasMes - $diasRestantes;
+        return $result *  $diasCorreto;
+    }
+
+    static function diasParaCalcular($quantidadeDiasMes, $diasRestantes){
+
+        $diasCorreto = $quantidadeDiasMes - $diasRestantes;
+        return   $diasCorreto;
+    }
+
+    static function calcularValorPorcentagem($valor, $porcentagem){
+       return  (($valor * $porcentagem) / 100);
+    }
 }
