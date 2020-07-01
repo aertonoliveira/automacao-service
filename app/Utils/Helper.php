@@ -50,8 +50,18 @@ class Helper extends Controller
         }else{
             $diasCorreto = $quantidadeDiasMes;
         }
-
-        return $result *  $diasCorreto;
+        $i =  $result *  $diasCorreto;
+        echo "resultado".$i;
+        echo "\n";
+        echo "quantidadeDiasMes".$quantidadeDiasMes;
+        echo "\n";
+        echo "diasRestantes".$diasRestantes;
+        echo "\n";
+        echo "porcentagem".$porcentagem;
+        echo "\n";
+        echo "result".$result;
+        echo "\n";
+        return  $i;
     }
 
     static function diasParaCalcular($quantidadeDiasMes, $diasRestantes){
