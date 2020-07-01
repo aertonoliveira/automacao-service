@@ -86,6 +86,7 @@ class RelatorioMensal extends Command
                 $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
                 $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
                 $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
+                dd($quantidadeDiasMes);
                 $input['comissao'] = Helper::calcularValorPorcentagem($i['valor_atualizado'],  $input['porcentagem_calculada']);
                 $input['data_referencia'] =  $dtToronto;
                 $input['porcentagem'] = $i['porcentagem'];
