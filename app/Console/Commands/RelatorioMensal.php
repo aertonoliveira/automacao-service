@@ -42,7 +42,7 @@ class RelatorioMensal extends Command
     public function handle()
     {
         $from = date('2020-04-01');
-        $to = date('2020-06-30');
+        $to = date('2020-04-30');
         $result = ContratoMutuo::whereBetween('inicio_mes', [$from, $to])->get();
         $datetime = Carbon::now('America/Sao_Paulo');
         $dataAtual = $datetime->format('Y-m-d H:i:s');
@@ -148,7 +148,7 @@ class RelatorioMensal extends Command
                 $input['contrato_id'] = $i['id'];
                 $input['user_id'] = $i['user_id'];
                 $input['pagar_total'] =   $input['comissao'] +  $i['valor'];
-                $valorSomado =  $input['comissao'] +  $i['valor'];
+                $valorSomado =  $input['comissao'] +  $i['valor_atualizado'];
 
                 $resultContrato = ContratoMutuo::find($i['id']);
                 $resultContrato->valor_atualizado = $valorSomado;
