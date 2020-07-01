@@ -147,7 +147,7 @@ class RelatorioMensal extends Command
                 $input['contrato_id'] = $i['id'];
                 $input['user_id'] = $i['user_id'];
                 $input['pagar_total'] =   $input['comissao'] +  $i['valor'];
-                dd("parou");
+                dd($i['tipo_contrato']);
                 $valorSomado =  $input['comissao'] +  $i['valor'];
 
                 $resultContrato = ContratoMutuo::find($i['id']);
