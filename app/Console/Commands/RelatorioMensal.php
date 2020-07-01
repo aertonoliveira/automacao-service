@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\ContratoMutuo;
 use App\Utils\Helper;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 
 class RelatorioMensal extends Command
@@ -39,24 +41,127 @@ class RelatorioMensal extends Command
      */
     public function handle()
     {
-        $result = ContratoMutuo::all();
+        $from = date('2020-04-01');
+        $to = date('2020-04-30');
+        $result = ContratoMutuo::whereBetween('inicio_mes', [$from, $to])->get();
+        $datetime = Carbon::now('America/Sao_Paulo');
+        $dataAtual = $datetime->format('Y-m-d H:i:s');
         foreach ($result as $i){
+
             $mesQuebrado  = explode("-", $i['inicio_mes']);
-            $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
-            $diasCalculados = Helper::diasParaCalcular($quantidadeDiasMes, $mesQuebrado[2]);
-            $valorDivido = Helper::dividirDiasPorPorcentagem($quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
-            $valorPorcentagem = Helper::calcularValorPorcentagem($i['valor'], $valorDivido);
 
-            echo 'data: '.$i['inicio_mes'];
-            echo ' - ';
-            echo 'dias do mês: '.$quantidadeDiasMes;
-            echo ' - ';
-            echo 'Dias Calculado: '. $diasCalculados ;
-            echo ' - ';
+//            $leitura = \App\Models\RelatorioMensal::all();
 
-            echo 'Porcentagem: '.$valorDivido;
-            echo ' - ';
-            echo 'Lucro: '.$valorPorcentagem;
+            if($i['tipo_contrato']=== 'Composto'){
+
+                if(is_null($i['agendamento_relatorio']) ){
+                    $dataAtualQuebrada = explode("-", $i['inicio_mes']);
+                    $mesAfrente =  $dataAtualQuebrada[1] + 1;
+                    $dtToronto = Carbon::create($dataAtualQuebrada[0], $mesAfrente, 1, 0, 0, 0, 'America/Toronto');
+
+                    $resultContrato = ContratoMutuo::find($i['id']);
+                    $resultContrato->agendamento_relatorio = $dtToronto;
+                    $resultContrato->save();
+                }else{
+                    $b = explode("-", $i['agendamento_relatorio']);
+                    $c = explode(" ", $b[2]);
+
+//
+                    echo $b[1];
+                    if( $mesQuebrado[1] !=  $b[1]){
+                        $mesQuebrado[2] = $c[0];
+
+                    }
+
+                    $dataAtualQuebrada = explode("-", $i['agendamento_relatorio']);
+                    $mesAfrente =  $dataAtualQuebrada[1] + 1;
+                    $dtToronto = Carbon::create($dataAtualQuebrada[0], $mesAfrente, 1, 0, 0, 0, 'America/Toronto');
+
+                    $resultContrato = ContratoMutuo::find($i['id']);
+                    $resultContrato->agendamento_relatorio = $dtToronto;
+                    $resultContrato->save();
+
+                }
+
+                $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
+                $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
+
+
+
+                $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $input['dias_calculados'], $i['porcentagem'], $mesQuebrado[2]);
+                $input['comissao'] = Helper::calcularValorPorcentagem($i['valor_atualizado'],  $input['porcentagem_calculada']);
+                $input['data_referencia'] =  $dtToronto;
+                $input['porcentagem'] = $i['porcentagem'];
+                $input['valor_contrato'] = $i['valor'];
+                $input['contrato_id'] = $i['id'];
+                $input['user_id'] = $i['user_id'];
+                $input['pagar_total'] =  $input['comissao'];
+
+                $valorSomado =  $input['comissao'] +  $i['valor_atualizado'];
+
+                $resultContrato = ContratoMutuo::find($i['id']);
+                $resultContrato->valor_atualizado = $valorSomado;
+                $resultContrato->save();
+
+
+
+                \App\Models\RelatorioMensal::create($input);
+
+
+//                dd($input);
+            }else{
+                if(is_null($i['agendamento_relatorio']) ){
+                    $dataAtualQuebrada = explode("-", $i['inicio_mes']);
+                    $mesAfrente =  $dataAtualQuebrada[1] + 1;
+                    $dtToronto = Carbon::create($dataAtualQuebrada[0], $mesAfrente, 1, 0, 0, 0, 'America/Toronto');
+
+                    $resultContrato = ContratoMutuo::find($i['id']);
+                    $resultContrato->agendamento_relatorio = $dtToronto;
+                    $resultContrato->save();
+                }else{
+                    $b = explode("-", $i['agendamento_relatorio']);
+                    $c = explode(" ", $b[2]);
+
+                    $mesQuebrado[1] = $b[1];
+                    if( $mesQuebrado[1] !=  $b[1]){
+                        $mesQuebrado[2] = $c[0];
+                    }
+
+                    $dataAtualQuebrada = explode("-", $i['agendamento_relatorio']);
+                    $mesAfrente =  $dataAtualQuebrada[1] + 1;
+                    $dtToronto = Carbon::create($dataAtualQuebrada[0], $mesAfrente, 1, 0, 0, 0, 'America/Toronto');
+
+                    $resultContrato = ContratoMutuo::find($i['id']);
+                    $resultContrato->agendamento_relatorio = $dtToronto;
+                    $resultContrato->save();
+
+                }
+
+                $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
+                $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
+                $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $input['dias_calculados'], $i['porcentagem'], $mesQuebrado[2]);
+                $input['comissao'] = Helper::calcularValorPorcentagem($i['valor'],  $input['porcentagem_calculada']);
+                $input['data_referencia'] =  $dtToronto;
+                $input['porcentagem'] = $i['porcentagem'];
+                $input['valor_contrato'] = $i['valor'];
+                $input['contrato_id'] = $i['id'];
+                $input['user_id'] = $i['user_id'];
+                $input['pagar_total'] =   $input['comissao'] +  $i['valor'];
+
+                $valorSomado =  $input['comissao'] +  $i['valor'];
+
+                $resultContrato = ContratoMutuo::find($i['id']);
+                $resultContrato->valor_atualizado = $valorSomado;
+                $resultContrato->save();
+
+
+
+                \App\Models\RelatorioMensal::create($input);
+
+
+
+            }
+            echo "processado";
             echo "\n";
         }
     }

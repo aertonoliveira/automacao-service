@@ -98,6 +98,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany('App\Models\Comissao', 'parent_id', 'id');
     }
 
+    public function relatorioMensal()
+    {
+        return $this->hasMany('App\Models\RelatorioMensal', 'user_id', 'id');
+    }
+
     public function contratoMutuo()
     {
         return $this->hasMany('App\Models\ContratoMutuo', 'user_id', 'id');

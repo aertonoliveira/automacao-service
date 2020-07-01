@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Relatorios\Controllers;
 
 use Illuminate\Http\Request;
 
 class RelatorioMensalController extends Controller
 {
-    //
+
 }

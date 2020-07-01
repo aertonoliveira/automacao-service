@@ -44,12 +44,20 @@ class Helper extends Controller
 
     static function dividirDiasPorPorcentagem($quantidadeDiasMes, $porcentagem, $diasRestantes){
         $result = $porcentagem/$quantidadeDiasMes;
-        $diasCorreto = $quantidadeDiasMes - $diasRestantes;
+        $diasCorreto=0;
+        if($diasRestantes != 01){
+            $diasCorreto = $quantidadeDiasMes - $diasRestantes;
+        }else{
+            $diasCorreto = $quantidadeDiasMes;
+        }
+
         return $result *  $diasCorreto;
     }
 
     static function diasParaCalcular($quantidadeDiasMes, $diasRestantes){
-
+        if($diasRestantes == 01){
+            return  $quantidadeDiasMes;
+        }
         $diasCorreto = $quantidadeDiasMes - $diasRestantes;
         return   $diasCorreto;
     }
