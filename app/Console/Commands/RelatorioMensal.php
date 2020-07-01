@@ -42,7 +42,7 @@ class RelatorioMensal extends Command
     public function handle()
     {
         $from = date('2020-04-01');
-        $to = date('2020-06-30');
+        $to = date('2020-04-30');
         $result = ContratoMutuo::whereBetween('inicio_mes', [$from, $to])->get();
         $datetime = Carbon::now('America/Sao_Paulo');
         $dataAtual = $datetime->format('Y-m-d H:i:s');
@@ -97,7 +97,7 @@ class RelatorioMensal extends Command
 
 
                 $valorSomado =  $input['comissao'] +  $i['valor_atualizado'];
-
+              //  dd( $valorSomado );
                 $resultContrato = ContratoMutuo::find($i['id']);
                 $resultContrato->valor_atualizado = $valorSomado;
                 $resultContrato->save();
@@ -121,11 +121,11 @@ class RelatorioMensal extends Command
                     $b = explode("-", $i['agendamento_relatorio']);
                     $c = explode(" ", $b[2]);
 
-                    $mesQuebrado[1] = $b[1];
+
                     if( $mesQuebrado[1] !=  $b[1]){
                         $mesQuebrado[2] = $c[0];
                     }
-
+                    echo "\n". $mesQuebrado[2]."Dias\n" ;
                     $dataAtualQuebrada = explode("-", $i['agendamento_relatorio']);
                     $mesAfrente =  $dataAtualQuebrada[1] + 1;
                     $dtToronto = Carbon::create($dataAtualQuebrada[0], $mesAfrente, 1, 0, 0, 0, 'America/Toronto');
