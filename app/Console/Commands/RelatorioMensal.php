@@ -86,7 +86,6 @@ class RelatorioMensal extends Command
                 $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
                 $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
                 $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
-                dd($quantidadeDiasMes);
                 $input['comissao'] = Helper::calcularValorPorcentagem($i['valor_atualizado'],  $input['porcentagem_calculada']);
                 $input['data_referencia'] =  $dtToronto;
                 $input['porcentagem'] = $i['porcentagem'];
@@ -139,15 +138,16 @@ class RelatorioMensal extends Command
 
                 $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
                 $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
+
                 $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
                 $input['comissao'] = Helper::calcularValorPorcentagem($i['valor'],  $input['porcentagem_calculada']);
+
                 $input['data_referencia'] =  $dtToronto;
                 $input['porcentagem'] = $i['porcentagem'];
                 $input['valor_contrato'] = $i['valor'];
                 $input['contrato_id'] = $i['id'];
                 $input['user_id'] = $i['user_id'];
                 $input['pagar_total'] =   $input['comissao'] +  $i['valor'];
-                dd($i['tipo_contrato']);
                 $valorSomado =  $input['comissao'] +  $i['valor'];
 
                 $resultContrato = ContratoMutuo::find($i['id']);
