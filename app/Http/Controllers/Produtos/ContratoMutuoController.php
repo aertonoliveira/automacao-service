@@ -82,26 +82,26 @@ class ContratoMutuoController extends Controller
     public function listProdutos(){
         if( Helper::getUsuarioAuthTipo() === "Administrador" ||  Helper::getUsuarioAuthTipo() === "Diretor" ||  Helper::getUsuarioAuthTipo() === "Gestor de analista"){
             $resultContratos = ContratoMutuo::with('user')->paginate(10);
-            return response()->json(['data' => $resultContratos], 201);
+            return response()->json($resultContratos, 201);
         }else if(Helper::getUsuarioAuthTipo() === "Analista Senior" ||  Helper::getUsuarioAuthTipo() === "Analista pleno"){
             $resultContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioAuthParent())->paginate(10);
-            return response()->json(['data' => $resultContratos], 201);
+            return response()->json($resultContratos, 201);
         }else{
             $resultContratos = ContratoMutuo::with('user')->where('user_id', Helper::getUsuarioAuthId())->paginate(10);
-            return response()->json(['data' => $resultContratos], 201);
+            return response()->json($resultContratos, 201);
         }
 
     }
 
     public function listProdutosCliente($id){
         $resultContratos = ContratoMutuo::where('user_id', $id)->paginate(10);
-        return response()->json(['data' => $resultContratos], 201);
+        return response()->json($resultContratos, 201);
     }
 
 
     public function contratosClientesLogado(){
         $userAuth = Auth::user();
         $resultContratos = ContratoMutuo::where('user_id', $userAuth->id)->get();
-        return response()->json(['data' => $resultContratos], 201);
+        return response()->json($resultContratos, 201);
     }
 }
