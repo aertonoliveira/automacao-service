@@ -67,8 +67,8 @@ class RelatorioMensal extends Command
                     $c = explode(" ", $b[2]);
 
 //
-                    echo $b[1];
-                    if( $mesQuebrado[1] !=  $b[1]){
+
+                    if( $mesQuebrado[1] !=$b[1]){
                         $mesQuebrado[2] = $c[0];
 
                     }
@@ -85,10 +85,7 @@ class RelatorioMensal extends Command
 
                 $quantidadeDiasMes = Helper::retornaQuantidadeDias($mesQuebrado[1], $mesQuebrado[0]);
                 $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
-
-
-
-                $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $input['dias_calculados'], $i['porcentagem'], $mesQuebrado[2]);
+                $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
                 $input['comissao'] = Helper::calcularValorPorcentagem($i['valor_atualizado'],  $input['porcentagem_calculada']);
                 $input['data_referencia'] =  $dtToronto;
                 $input['porcentagem'] = $i['porcentagem'];
@@ -96,6 +93,8 @@ class RelatorioMensal extends Command
                 $input['contrato_id'] = $i['id'];
                 $input['user_id'] = $i['user_id'];
                 $input['pagar_total'] =  $input['comissao'];
+
+
 
                 $valorSomado =  $input['comissao'] +  $i['valor_atualizado'];
 
