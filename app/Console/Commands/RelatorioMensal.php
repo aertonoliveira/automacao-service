@@ -52,7 +52,7 @@ class RelatorioMensal extends Command
 
 //            $leitura = \App\Models\RelatorioMensal::all();
 
-            if($i['tipo_contrato']=== 'Composto'){
+            if($i['tipo_contrato']== 'Composto'){
 
                 if(is_null($i['agendamento_relatorio']) ){
                     $dataAtualQuebrada = explode("-", $i['inicio_mes']);
