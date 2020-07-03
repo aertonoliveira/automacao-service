@@ -28,6 +28,13 @@ class Helper extends Controller
 
     }
 
+    static function getUsuarioParent($id){
+        $userAuth = Auth::user();
+        $result = User::where('user_parent_id',$id)->pluck('id');
+        return $result;
+
+    }
+
     static function getUsuarioAuthId(){
         $userAuth = Auth::user();
         return $userAuth->id;
@@ -51,16 +58,6 @@ class Helper extends Controller
             $diasCorreto = $quantidadeDiasMes;
         }
         $i =  $result *  $diasCorreto;
-        echo "resultado".$i;
-        echo "\n";
-        echo "quantidadeDiasMes".$quantidadeDiasMes;
-        echo "\n";
-        echo "diasRestantes".$diasRestantes;
-        echo "\n";
-        echo "porcentagem".$porcentagem;
-        echo "\n";
-        echo "result".$result;
-        echo "\n";
         return  $i;
     }
 

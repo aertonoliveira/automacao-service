@@ -11,9 +11,12 @@ class MetaCliente extends Model
         'meta_programada',
         'mata_atingida',
         'mata_faltando',
+        'meta_individual',
+        'meta_equipe',
         'inicio_mes',
         'final_mes',
         'status',
+        'ativo',
         'user_id'
     ];
 

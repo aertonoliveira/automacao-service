@@ -50,8 +50,6 @@ class RelatorioMensal extends Command
 
             $mesQuebrado  = explode("-", $i['inicio_mes']);
 
-//            $leitura = \App\Models\RelatorioMensal::all();
-
             if($i['tipo_contrato']== 'Composto'){
 
                 if(is_null($i['agendamento_relatorio']) ){
@@ -65,8 +63,6 @@ class RelatorioMensal extends Command
                 }else{
                     $b = explode("-", $i['agendamento_relatorio']);
                     $c = explode(" ", $b[2]);
-
-//
 
                     if( $mesQuebrado[1] !=$b[1]){
                         $mesQuebrado[2] = $c[0];

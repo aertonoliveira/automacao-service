@@ -101,7 +101,7 @@ class ContratoMutuoController extends Controller
 
     public function contratosClientesLogado(){
         $userAuth = Auth::user();
-        $resultContratos = ContratoMutuo::where('user_id', $userAuth->id)->get();
+        $resultContratos = ContratoMutuo::with('relatorio')->where('user_id', $userAuth->id)->get();
         return response()->json($resultContratos, 201);
     }
 }
