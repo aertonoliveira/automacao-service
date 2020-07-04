@@ -85,6 +85,7 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     Route::group(['namespace' => 'Relatorios'], function () {
         Route::get('relatorio/mensal', 'RelatorioMensalController@index');
+        Route::get('relatorio/mensal/user', 'RelatorioMensalController@indexAuth');
     });
 });
 
