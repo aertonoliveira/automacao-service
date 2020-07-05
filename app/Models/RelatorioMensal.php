@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\User;
+use App\Utils\Helper;
 use Illuminate\Database\Eloquent\Model;
 
 class RelatorioMensal extends Model
@@ -33,10 +35,22 @@ class RelatorioMensal extends Model
     public function search ($filter,$quantidadeItens = 15)
     {
         $relatorio = $this->with('contrato','user.contaBancaria.banco')->where(function ($query) use ($filter) {
-            if (isset($filter['id']))
-                $query->where('id', $filter['id']);
-         
-        })->paginate($quantidadeItens);
+            if (isset($filter['cpf'])){
+                $userResult = User::where('cpf',$filter['cpf'])->first();
+                $query->where('user_id', $userResult->id);
+            }
+
+            if (isset($filter['numero_contrato'])){
+                $contratoResult = ContratoMutuo::where('numero_contrato',$filter['numero_contrato'])->first();
+                $query->where('contrato_id', $contratoResult->id);
+            }
+
+            if (isset($filter['data'])){
+                $query->whereBetween('data_referencia', Helper::retornaIntervaloDatas($filter['data']));
+            }
+
+
+        })->paginate(10);
 
         return $relatorio;
     }

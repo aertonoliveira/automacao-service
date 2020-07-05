@@ -15,6 +15,7 @@ class ContratoMutuo extends Model
         'tipo_contato',
         'inicio_mes',
         'final_mes',
+        'numero_contrato',
         'ativo',
         'user_id'
     ];

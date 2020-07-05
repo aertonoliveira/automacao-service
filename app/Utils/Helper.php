@@ -32,14 +32,12 @@ class Helper extends Controller
         $userAuth = Auth::user();
         $result = User::where('user_parent_id',$id)->pluck('id');
         return $result;
-
     }
 
     static function getUsuarioAuthId(){
         $userAuth = Auth::user();
         return $userAuth->id;
     }
-
 
     static function retornaQuantidadeDias($mes, $ano){
 
@@ -71,5 +69,31 @@ class Helper extends Controller
 
     static function calcularValorPorcentagem($valor, $porcentagem){
        return  (($valor * $porcentagem) / 100);
+    }
+
+    static function montaArrayMeses(){
+        $arr_meses = array(
+            '01' => 'Janeiro',
+            '02' => 'Fevereiro',
+            '03' => 'Março',
+            '04' => 'Abril',
+            '05' => 'Maio',
+            '06' => 'Junho',
+            '07' => 'Julho',
+            '08' => 'Agosto',
+            '09' => 'Setembro',
+            '10' => 'Outubro',
+            '11' => 'Novembro',
+            '12' => 'Dezembro'
+        );
+        return $arr_meses;
+    }
+
+    static function retornaIntervaloDatas($mes){
+        $ano = date('Y');
+        $finalMes = Helper::retornaQuantidadeDias($mes,$ano);
+        $inicio = date($ano.'-'.$mes.'-01');
+        $fim = date($ano.'-'.$mes.'-'.$finalMes);
+        return[$inicio,$fim];
     }
 }
