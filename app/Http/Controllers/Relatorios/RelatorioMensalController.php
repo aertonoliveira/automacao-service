@@ -42,9 +42,9 @@ class RelatorioMensalController extends Controller
         foreach($arr_meses as $mes => $meses) {
 
             $extrato[$meses] =   $this->repository->with('contrato', 'user')
-                ->orderBy('created_at')
+                ->orderBy('data_referencia')
                 ->where('user_id',Helper::getUsuarioAuthId())
-                ->whereBetween('created_at', Helper::retornaIntervaloDatas($mes) )->get();
+                ->whereBetween('data_referencia', Helper::retornaIntervaloDatas($mes) )->get();
         }
 //        dd($extrato);
 //        $json = json_encode($extrato);
