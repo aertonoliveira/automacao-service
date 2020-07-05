@@ -35,30 +35,18 @@ class RelatorioMensalController extends Controller
 
     public function indexAuth(Request $request)
     {
-        $ano = date('Y');
-        $extrato = [];
+
         $arr_meses = Helper::montaArrayMeses();
-
+        $extrato  = [];
         foreach($arr_meses as $mes => $meses) {
-
-            $extrato[$meses] =   $this->repository->with('contrato', 'user')
+            $i =   $this->repository->with('contrato', 'user')
                 ->orderBy('data_referencia')
                 ->where('user_id',Helper::getUsuarioAuthId())
                 ->whereBetween('data_referencia', Helper::retornaIntervaloDatas($mes) )->get();
+            $extrato[] = ['relatorio' => $i, 'mes' => $meses];
         }
-//        dd($extrato);
-//        $json = json_encode($extrato);
-        return response()->json([
-            'data' => $extrato,
 
-        ]);
-
-
-//        if ($request->query()) {
-//            return $this->repository->search($request->query());
-//        } else {
-//            return $this->repository->with('contrato', 'user.contaBancaria.banco')->orderBy('data_referencia')->where('user_id',Helper::getUsuarioAuthId())->paginate(10);
-//        }
+        return response()->json( $extrato,200);
     }
 
 

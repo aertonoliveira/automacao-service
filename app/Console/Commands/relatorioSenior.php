@@ -52,22 +52,24 @@ class relatorioSenior extends Command
             foreach($resultContratos as $item){
 
                 $somaMeta = $somaMeta + $item['valor'];
+
             }
 
 
             $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])
                             ->where('user_id',$i['id'] )->first();
 
-//            echo ;
-            //echo "ids: ".$i['roles'][0]['name'];
-//            echo "valor: ".$somaMeta;
-            echo "\n";
-            echo "\n";
-          if($i['roles'][0]['name'] != 'Cliente' &&   $i['roles'][0]['name'] != 'Diretor' && $i['roles'][0]['name'] != 'Administrador' ) {
 
+
+          if($i['roles'][0]['name'] != 'Cliente' &&   $i['roles'][0]['name'] != 'Diretor' && $i['roles'][0]['name'] != 'Administrador' ) {
+              echo " Nome Usuario: ".$i['name'];
+              echo " Tipo Usuario: ".$i['roles'][0]['name'];
+              echo " Equipe: ".$resultMeta['meta_equipe'];
+              echo " Resultado Equipe: ".$somaMeta;
+
+              echo "\n";
             if($resultMeta['meta_equipe'] <= $somaMeta){
-                echo$resultMeta['meta_equipe'];
-                echo $somaMeta;
+
 
             }
           }
