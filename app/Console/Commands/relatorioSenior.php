@@ -43,7 +43,7 @@ class relatorioSenior extends Command
     {
         $from = date('2020-06-01');
         $to = date('2020-06-30');
-        $resultUser = User::with('roles')->get();
+        $resultUser = User::with('roles')->where('id',5)->get();
 
         foreach ($resultUser as $i) {
 
@@ -62,18 +62,29 @@ class relatorioSenior extends Command
 
 
           if($i['roles'][0]['name'] != 'Cliente' &&   $i['roles'][0]['name'] != 'Diretor' && $i['roles'][0]['name'] != 'Administrador' ) {
-              echo " Nome Usuario: ".$i['name'];
-              echo " Tipo Usuario: ".$i['roles'][0]['name'];
-              echo " Equipe: ".$resultMeta['meta_equipe'];
-              echo " Resultado Equipe: ".$somaMeta;
 
-              echo "\n";
-            if($resultMeta['meta_equipe'] <= $somaMeta){
+            if($resultMeta['meta_individual'] <= $somaMeta){
+                $todosContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioParent($i['id']))->get();
+                $valorCarteira = 0;
+                foreach($todosContratos as $item){
+                    $valorCarteira = $valorCarteira + $item['valor'];
+                }
+                if($i['roles'][0]['name'] == 'Analista pleno'){
+                   $a = Helper::calcularValorPorcentagem(1, $valorCarteira);
+                   $b = Helper::calcularValorPorcentagem(5, $somaMeta) ;
+                   $soma = $a + $b;
+                   echo "Valor Carteira: ".$a;
+                   echo "\n";
+                   echo "Valor Mês: ".$b;
+                   echo "\n";
+                   echo "Valor Total a Pagar: ".$soma;
+                }else if($i['roles'][0]['name'] == 'Analista Senior'){
 
-
+                }
+              
             }
           }
-
+          exit;
         }
 
 
