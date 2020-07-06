@@ -51,7 +51,7 @@ class RelatorioMensal extends Model
                 $result = ContratoMutuo::where('tipo_contrato',$filter['tipo_contrato'])->pluck('id');
                 $query->whereIn('contrato_id', $result);
             }
-        })->orderBy('name', 'ASC')->orderBy('data_referencia', 'ASC')->paginate(10);
+        })->paginate(10);
 
         return $relatorio;
     }

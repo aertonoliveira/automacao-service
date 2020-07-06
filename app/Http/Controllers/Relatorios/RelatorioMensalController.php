@@ -22,7 +22,7 @@ class RelatorioMensalController extends Controller
         if ($request->query()) {
             return $this->repository->search($request->query());
         } else {
-            return $this->repository->with('contrato', 'user.contaBancaria.banco')->orderBy('name', 'ASC')->orderBy('data_referencia', 'ASC')->paginate(10);
+            return $this->repository->with('contrato', 'user.contaBancaria.banco')->orderBy('id')->paginate(10);
         }
     }
 
