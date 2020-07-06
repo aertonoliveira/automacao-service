@@ -45,7 +45,7 @@ class RelatorioMensal extends Model
             }
             if (isset($filter['data'])){
 //                dd( Helper::retornaIntervaloDatas($filter['data']));
-                $query->whereBetween('created_at', Helper::retornaIntervaloDatas($filter['data']));
+                $query->whereBetween('data_referencia', Helper::retornaIntervaloDatas($filter['data']));
             }
             if (isset($filter['tipo_contrato'])){
                 $result = ContratoMutuo::where('tipo_contrato',$filter['tipo_contrato'])->pluck('id');

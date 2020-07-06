@@ -83,7 +83,7 @@ class RelatorioMensal extends Command
                 $input['dias_calculados'] = Helper::diasParaCalcular($quantidadeDiasMes , $mesQuebrado[2]);
                 $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
                 $input['comissao'] = Helper::calcularValorPorcentagem($i['valor_atualizado'],  $input['porcentagem_calculada']);
-                $input['data_referencia'] =  $dtToronto;
+                $input['data_referencia'] =  $to;
                 $input['porcentagem'] = $i['porcentagem'];
                 $input['valor_contrato'] = $i['valor'];
                 $input['contrato_id'] = $i['id'];
@@ -138,7 +138,7 @@ class RelatorioMensal extends Command
                 $input['porcentagem_calculada'] = Helper::dividirDiasPorPorcentagem(  $quantidadeDiasMes, $i['porcentagem'], $mesQuebrado[2]);
                 $input['comissao'] = Helper::calcularValorPorcentagem($i['valor'],  $input['porcentagem_calculada']);
 
-                $input['data_referencia'] =  $dtToronto;
+                $input['data_referencia'] =  $to;
                 $input['porcentagem'] = $i['porcentagem'];
                 $input['valor_contrato'] = $i['valor'];
                 $input['contrato_id'] = $i['id'];
