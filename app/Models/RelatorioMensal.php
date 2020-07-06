@@ -39,17 +39,19 @@ class RelatorioMensal extends Model
                 $userResult = User::where('cpf',$filter['cpf'])->first();
                 $query->where('user_id', $userResult->id);
             }
-
             if (isset($filter['numero_contrato'])){
                 $contratoResult = ContratoMutuo::where('numero_contrato',$filter['numero_contrato'])->first();
                 $query->where('contrato_id', $contratoResult->id);
             }
-
             if (isset($filter['data'])){
-                $query->whereBetween('data_referencia', Helper::retornaIntervaloDatas($filter['data']));
+//                dd( Helper::retornaIntervaloDatas($filter['data']));
+                $query->whereBetween('created_at', Helper::retornaIntervaloDatas($filter['data']));
             }
-
-
+            if (isset($filter['tipo_contrato'])){
+                $result = ContratoMutuo::where('tipo_contrato',$filter['tipo_contrato'])->pluck('id');
+                var_dump($result);
+                $query->whereIn('contrato_id', $result);
+            }
         })->paginate(10);
 
         return $relatorio;
