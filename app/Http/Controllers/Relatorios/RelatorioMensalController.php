@@ -18,7 +18,6 @@ class RelatorioMensalController extends Controller
 
     public function index(Request $request)
     {
-       //dd($request->query());
         if ($request->query()) {
             return $this->repository->search($request->query());
         } else {

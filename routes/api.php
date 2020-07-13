@@ -79,6 +79,7 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
         Route::get('produto', 'ContratoMutuoController@listProdutos');
         Route::get('produto/cliente', 'ContratoMutuoController@contratosClientesLogado');
         Route::get('produto/{id}', 'ContratoMutuoController@listProdutosCliente');
+
     });
 });
 
@@ -90,7 +91,8 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
     });
 });
 
-
-
+Route::group(['namespace' => 'Produtos'], function () {
+    Route::get('produto/pdf/{id}', 'ContratoMutuoController@gerarPdf');
+});
 
 

@@ -7,6 +7,7 @@ use App\Models\ContratoMutuo;
 use App\Models\Role;
 use App\Models\SaldoConta;
 use App\User;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,13 @@ use Carbon\Carbon;
 
 class ContratoMutuoController extends Controller
 {
+    private $repository;
+
+    public function __construct(ContratoMutuo $contrato)
+    {
+        $this->repository = $contrato;
+    }
+
     public function create(Request $request)
     {
         $userAuth = Auth::user();
@@ -79,10 +87,14 @@ class ContratoMutuoController extends Controller
         }
     }
 
-    public function listProdutos(){
+    public function listProdutos(Request $request){
         if( Helper::getUsuarioAuthTipo() === "Administrador" ||  Helper::getUsuarioAuthTipo() === "Diretor" ||  Helper::getUsuarioAuthTipo() === "Gestor de analista"){
-            $resultContratos = ContratoMutuo::with('user')->paginate(10);
-            return response()->json($resultContratos, 201);
+            if ($request->query()) {
+                return $this->repository->search($request->query());
+            } else {
+                return $this->repository->with('user')->paginate(10);
+            }
+
         }else if(Helper::getUsuarioAuthTipo() === "Analista Senior" ||  Helper::getUsuarioAuthTipo() === "Analista pleno"){
             $resultContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioAuthParent())->paginate(10);
             return response()->json($resultContratos, 201);
@@ -106,5 +118,14 @@ class ContratoMutuoController extends Controller
 
     public function ativarContrato($id){
 
+    }
+
+    public function gerarPdf($id){
+        $contrato = ContratoMutuo::with('user')->where('id', $id)->first();
+
+        //dd($resultContratos);
+        return \PDF::loadView('contratoMutuo', compact('contrato'))
+            // Se quiser que fique no formato a4 retrato: ->setPaper('a4', 'landscape')
+            ->download('contratoMutuo.pdf');
     }
 }
