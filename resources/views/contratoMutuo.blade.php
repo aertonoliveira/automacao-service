@@ -39,10 +39,7 @@
 
     {{$contrato->user->name}}, Brasileiro,   {{$contrato->user->estado_civil}}, {{$contrato->user->profissao}}, residente e domiciliado na {{$contrato->user->rua}},{{$contrato->user->numero}},{{$contrato->user->complemento}}, {{$contrato->user->bairro}}, {{$contrato->user->cidade}}, Estado de {{$contrato->user->estado}}, portador da cédula de identidade RG n° {{$contrato->user->rg}}; e, de outro lado:
     <br><br><br>
-    Se Pessoa Jurídica:
-    (.......INVESTIDOR A.......), residente e domiciliado na (..............Logradouro................), (.......número.......), (.......complemento.......), (............bairro..........), (......cidade......), Estado de (......UF......), inscrito no CNPJ/MF sob o n° (..................................); e, de outro lado:
-    <br><br><br>
-    (.........SOCIEDADE.........), sociedade com sede na (........................Logradouro..........................), (.......número.......), (..............complemento...........), (....................bairro.....................), (..........cidade.........), Estado de (......UF......), inscrita no CNPJ/MF sob o n° (..................................) (.......“Sociedade”.......); e, ainda, como intervenientes anuentes:
+    JIN APLICACOES FINANCEIRAS EIRELI, sociedade com sede na AV DR JOSE MACHADO DE SOUZA , 120, SALA 1508 COND HORIZONTE JARDINS OF , JARDINS , ARACAJU , Estado de SE, inscrita no CNPJ/MF sob o n° 18.359.495/0001-05 JIN INVEST MONEY; e, ainda, como intervenientes anuentes:
     <br><br><br>
     <b><u>III- DEFINIÇÕES</u></b>
     <br>
