@@ -56,7 +56,7 @@ class AuthController extends Controller
         // transform user data
         $data = User::with('roles','parent')->where('id', $user->id)->first();
         $result = User::with('roles.permission')->where('id', $user->id)->get();
-
+        dd($result);
         $permissao = [];
         if(count($result[0]['roles']) > 0){
             $permissao = $result[0]['roles'][0]['permission'];

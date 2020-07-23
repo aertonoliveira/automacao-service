@@ -11,6 +11,7 @@
     <style>
         .full-height{
             line-height: 20px;
+            text-align:justify;
         }
     </style>
 
@@ -22,8 +23,6 @@
     <br><br><br>
     <b>JIN INVEST MONEY EIRELI</b>
     <br><br><br>
-    _____ de ____________ de______
-    <br><br><br>
     <b><u>I-DO OBJETO</u></b>
     <br>
     Cláusula primeira - O objeto do presente contrato é o investimento para o fomento à inovação e incentivo à produção, considerando que os Sócios são titulares e possuidores legítimos de 100% (cem por cento) do capital social da Sociedade. O Investidor realizará um aporte especial de capital, nos termos do artigo 61-A da Lei Complementar n° 123/2006.
@@ -34,12 +33,9 @@
     <br>
     Cláusula terceira - Para todos os efeitos jurídicos, ficam identificadas as Partes:
     <br><br>
-    Se Pessoa Física:
-    <br><br>
-
     {{$contrato->user->name}}, Brasileiro,   {{$contrato->user->estado_civil}}, {{$contrato->user->profissao}}, residente e domiciliado na {{$contrato->user->rua}},{{$contrato->user->numero}},{{$contrato->user->complemento}}, {{$contrato->user->bairro}}, {{$contrato->user->cidade}}, Estado de {{$contrato->user->estado}}, portador da cédula de identidade RG n° {{$contrato->user->rg}}; e, de outro lado:
     <br><br><br>
-    JIN APLICACOES FINANCEIRAS EIRELI, sociedade com sede na AV DR JOSE MACHADO DE SOUZA , 120, SALA 1508 COND HORIZONTE JARDINS OF , JARDINS , ARACAJU , Estado de SE, inscrita no CNPJ/MF sob o n° 18.359.495/0001-05 JIN INVEST MONEY; e, ainda, como intervenientes anuentes:
+    JIN APLICACOES FINANCEIRAS, sociedade com sede na AV DR JOSE MACHADO DE SOUZA , 120, SALA 1508 COND HORIZONTE JARDINS OF , JARDINS , ARACAJU , Estado de SE, inscrita no CNPJ/MF sob o n° 18.359.495/0001-05 JIN INVEST MONEY; e, ainda, como intervenientes anuentes:
     <br><br><br>
     <b><u>III- DEFINIÇÕES</u></b>
     <br>
@@ -114,7 +110,7 @@
 
     <br><br><br>
 
-    JIN INVEST MONEY EIRELI:
+    <p style="text-align: left">JIN INVEST MONEY EIRELI:</p>
     _____________________________________________________________________
 
     <br><br><br>

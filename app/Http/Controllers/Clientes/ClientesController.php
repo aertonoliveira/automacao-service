@@ -108,9 +108,9 @@ class ClientesController extends Controller
     public function index(Request $request, $tipo){
         $userAuth = Auth::user();
         $roleResult = Role::where('name',$tipo)->first();
-
+        //dd($roleResult);
         $result = User::with('roles')->where('id', $userAuth->id)->get();
-        if ($result[0]['roles'][0]['name'] === "Administrador"){
+        if ($result[0]['roles'][0]['name'] === "Administrador" || $result[0]['roles'][0]['name'] === "Diretor"){
             $userResult = User::with('roles','parent','saldoConta')->where('role_id',$roleResult->id)->paginate(10);
             return response()->json($userResult, 200);
         }else{
