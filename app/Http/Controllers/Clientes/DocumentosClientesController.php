@@ -17,33 +17,29 @@ class DocumentosClientesController extends Controller
         $input = $request->all();
 
         if ($request->hasFile('frente_rg') && $request->file('frente_rg')->isValid()) {
-            $url = Storage::disk('s3')->put('images/frente_rg'.$input['user_id'], $request->file('frente_rg'));
+            $url = Storage::disk('s3')->put('images/frente_rg/'.$input['user_id'], $request->file('frente_rg'));
             $input['frente_rg'] = $url;;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('verso_rg') && $request->file('verso_rg')->isValid()) {
-            $url = Storage::disk('s3')->put('images/frente_rg'.$input['user_id'], $request->file('frente_rg'));
+            $url = Storage::disk('s3')->put('images/verso_rg/'.$input['user_id'], $request->file('verso_rg'));
             $input['verso_rg'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('comprovante_residencia') && $request->file('comprovante_residencia')->isValid()) {
-            $extension = $request->comprovante_residencia->extension();
-            $nameFile = "comprovante_residencia.{$extension}";
-            $request->comprovante_residencia->storeAs('imagens/documentos/'. $input['user_id'] . '/'  . $date->month . '/' . $date->day, $nameFile);
-            $input['comprovante_residencia'] = 'storage/imagens/documentos/'.$input['user_id'] . '/'   . $date->month . '/' . $date->day . '/' . $nameFile;
+            $url = Storage::disk('s3')->put('images/comprovante_residencia/'.$input['user_id'], $request->file('comprovante_residencia'));
+            $input['comprovante_residencia'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('comprovante_pagamento') && $request->file('comprovante_pagamento')->isValid()) {
-            $extension = $request->comprovante_pagamento->extension();
-            $nameFile = "comprovante_pagamento.{$extension}";
-            $request->comprovante_pagamento->storeAs('imagens/documentos/'. $input['user_id'] . '/'  . $date->month . '/' . $date->day, $nameFile);
-            $input['comprovante_pagamento'] = 'storage/imagens/documentos/'.$input['user_id'] . '/'   . $date->month . '/' . $date->day . '/' . $nameFile;
+            $url = Storage::disk('s3')->put('images/comprovante_pagamento/'.$input['user_id'], $request->file('comprovante_pagamento'));
+            $input['comprovante_pagamento'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
