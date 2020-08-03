@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Clientes;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\User as UserResource;
+use App\Models\Arquivo;
 use App\Models\DocumentosClientes;
 use App\Models\Role;
 use App\Models\SaldoConta;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class ClientesController extends Controller
@@ -161,10 +163,8 @@ class ClientesController extends Controller
         $input = $request->all();
 
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
-            $extension = $request->avatar->extension();
-            $nameFile = "avatar.{$extension}";
-            $request->avatar->storeAs('imagens/perfil/'. $userAuth->id . '/'  . $date->month . '/' . $date->day, $nameFile);
-            $input['avatar'] = 'storage/imagens/perfil/'. $userAuth->id . '/'   . $date->month . '/' . $date->day . '/' . $nameFile;
+            $url = Storage::disk('s3')->put('images/avatar/'.$userAuth->id, $request->file('avatar'));
+            $input['avatar'] =$url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }

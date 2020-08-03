@@ -6,6 +6,7 @@ use App\Models\DocumentosClientes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentosClientesController extends Controller
 {
@@ -16,19 +17,15 @@ class DocumentosClientesController extends Controller
         $input = $request->all();
 
         if ($request->hasFile('frente_rg') && $request->file('frente_rg')->isValid()) {
-            $extension = $request->frente_rg->extension();
-            $nameFile = "frente_rg.{$extension}";
-            $request->frente_rg->storeAs('imagens/documentos/'. $input['user_id'] . '/'  . $date->month . '/' . $date->day, $nameFile);
-            $input['frente_rg'] = 'storage/imagens/documentos/'.$input['user_id'] . '/'   . $date->month . '/' . $date->day . '/' . $nameFile;
+            $url = Storage::disk('s3')->put('images/frente_rg'.$input['user_id'], $request->file('frente_rg'));
+            $input['frente_rg'] = $url;;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('verso_rg') && $request->file('verso_rg')->isValid()) {
-            $extension = $request->verso_rg->extension();
-            $nameFile = "verso_rg.{$extension}";
-            $request->verso_rg->storeAs('imagens/documentos/'. $input['user_id'] . '/'  . $date->month . '/' . $date->day, $nameFile);
-            $input['verso_rg'] = 'storage/imagens/documentos/'.$input['user_id'] . '/'   . $date->month . '/' . $date->day . '/' . $nameFile;
+            $url = Storage::disk('s3')->put('images/frente_rg'.$input['user_id'], $request->file('frente_rg'));
+            $input['verso_rg'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
