@@ -73,7 +73,7 @@ class relatorioSenior extends Command
               echo $totalMes."\n";
               MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $metaIndividual]);
           }
-
+            echo Helper::calcularValorPorcentagem(5, $metaIndividual);
           if($resultMeta['meta_equipe'] <= $metaEquipe){
               $porcentagemEquipe = Helper::calcularValorPorcentagem(1, $metaEquipe);
               $resultMetaEquipe = MetaCliente::where('id',$resultMeta['id'])->first();
