@@ -49,7 +49,7 @@ class relatorioSenior extends Command
             $metaIndividual = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParentClientes($i['id']))->sum('valor');
             $metaEquipe = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParentAnalistas($i['id']))->sum('valor');
             $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])->where('user_id',$i['id'] )->first();
-
+            echo Helper::calcularValorPorcentagem(7, $metaIndividual);
           if($i['roles'][0]['name'] != 'Cliente' &&   $i['roles'][0]['name'] != 'Diretor' && $i['roles'][0]['name'] != 'Administrador' ) {
 
             if($resultMeta['meta_individual'] <= $metaIndividual){
@@ -69,11 +69,11 @@ class relatorioSenior extends Command
                 ]);
             }
           }else{
-              $totalMes = Helper::calcularValorPorcentagem(5, $metaIndividual);
+              $totalMes = Helper::calcularValorPorcentagem(7, $metaIndividual);
               echo $totalMes."\n";
               MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $metaIndividual]);
           }
-            echo Helper::calcularValorPorcentagem(5, $metaIndividual);
+
           if($resultMeta['meta_equipe'] <= $metaEquipe){
               $porcentagemEquipe = Helper::calcularValorPorcentagem(1, $metaEquipe);
               $resultMetaEquipe = MetaCliente::where('id',$resultMeta['id'])->first();
