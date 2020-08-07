@@ -42,7 +42,8 @@ class totalMetas extends Command
         $from = date('2020-07-01');
         $to = date('2020-07-31');
         $result = ContratoMutuo::where('tipo_contrato','Simples')->pluck('id');
-        $totalClientes = \App\Models\RelatorioMensal::whereIn('id',$result)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
+        // dd($result);
+        $totalClientes = \App\Models\RelatorioMensal::whereIn('contrato_id',$result)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
         echo $totalClientes;
     }
 }
