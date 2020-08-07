@@ -41,7 +41,7 @@ class totalMetas extends Command
     {
         $from = date('2020-07-01');
         $to = date('2020-07-31');
-        $totalClientes = \App\Models\RelatorioMensal::whereBetween('inicio_mes', [$from, $to])->sum('comissao');
+        $totalClientes = \App\Models\RelatorioMensal::whereBetween('data_referencia', [$from, $to])->sum('comissao');
         echo $totalClientes;
     }
 }
