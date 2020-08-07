@@ -19,7 +19,8 @@ class ContratoMutuo extends Model
         'final_mes',
         'numero_contrato',
         'ativo',
-        'user_id'
+        'user_id',
+
     ];
 
     public function user(){

@@ -29,9 +29,16 @@ class Helper extends Controller
     }
 
     static function getUsuarioParent($id){
-        $userAuth = Auth::user();
+        return  User::where('user_parent_id',$id)->pluck('id');;
+    }
+
+    static function getUsuarioParentClientes($id){
+        return  User::where(['user_parent_id' => $id, 'role_id' => 6])->pluck('id');
+    }
+
+    static function getUsuarioParentAnalistas($id){
         $result = User::where('user_parent_id',$id)->pluck('id');
-        return $result;
+        return User::whereIn('user_parent_id',$result)->pluck('id');
     }
 
     static function getUsuarioAuthId(){

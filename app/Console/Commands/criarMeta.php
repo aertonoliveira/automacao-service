@@ -48,7 +48,7 @@ class criarMeta extends Command
 //        'ativo',
 //        meta_individual
         $from = date('2020-07-01');
-        $to = date('2020-07-30');
+        $to = date('2020-07-31');
         $resultUser = User::with('roles')->get();
 
         foreach ($resultUser as $i) {

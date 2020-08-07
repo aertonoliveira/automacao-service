@@ -41,52 +41,50 @@ class relatorioSenior extends Command
      */
     public function handle()
     {
-        $from = date('2020-06-01');
-        $to = date('2020-06-30');
-        $resultUser = User::with('roles')->where('id',5)->get();
+        $from = date('2020-07-01');
+        $to = date('2020-07-31');
+        $resultUser = User::with('roles')->where('role_id',4)->get();
 
         foreach ($resultUser as $i) {
-
-            $resultContratos = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParent($i['id']))->get();
-            $somaMeta = 0;
-            foreach($resultContratos as $item){
-
-                $somaMeta = $somaMeta + $item['valor'];
-
-            }
-
-
-            $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])
-                            ->where('user_id',$i['id'] )->first();
-
-
+            $metaIndividual = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParentClientes($i['id']))->sum('valor');
+            $metaEquipe = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParentAnalistas($i['id']))->sum('valor');
+            $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])->where('user_id',$i['id'] )->first();
 
           if($i['roles'][0]['name'] != 'Cliente' &&   $i['roles'][0]['name'] != 'Diretor' && $i['roles'][0]['name'] != 'Administrador' ) {
 
-            if($resultMeta['meta_individual'] <= $somaMeta){
-                $todosContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioParent($i['id']))->get();
-                $valorCarteira = 0;
-                foreach($todosContratos as $item){
-                    $valorCarteira = $valorCarteira + $item['valor'];
-                }
-                if($i['roles'][0]['name'] == 'Analista pleno'){
-                   $a = Helper::calcularValorPorcentagem(1, $valorCarteira);
-                   $b = Helper::calcularValorPorcentagem(5, $somaMeta) ;
-                   $soma = $a + $b;
-                   echo "Valor Carteira: ".$a;
-                   echo "\n";
-                   echo "Valor Mês: ".$b;
-                   echo "\n";
-                   echo "Valor Total a Pagar: ".$soma;
-                }else if($i['roles'][0]['name'] == 'Analista Senior'){
+            if($resultMeta['meta_individual'] <= $metaIndividual){
+                $valorCarteira = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioParent($i['id']))->sum('valor');
+                   $valorCarteira = $valorCarteira - $metaIndividual;
+                   $porcentagemCarteira = Helper::calcularValorPorcentagem(1, $valorCarteira);
+                   $porcentagemIndividual = Helper::calcularValorPorcentagem(7, $metaIndividual) ;
+                   $soma = $porcentagemCarteira + $porcentagemIndividual;
 
-                }
-              
+
+                MetaCliente::where('id',$resultMeta['id'])->update([
+                    'mata_atingida' => $soma,
+                    'valor_mes' => $metaIndividual,
+                    'meta_mes' => $porcentagemIndividual,
+                    'valor_carteira' => $valorCarteira,
+                    'porcentagem_valor_carteira' =>  $porcentagemCarteira
+                ]);
             }
+          }else{
+              $totalMes = Helper::calcularValorPorcentagem(5, $metaIndividual);
+              MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $metaIndividual]);
           }
-          exit;
+
+          if($resultMeta['meta_equipe'] <= $metaEquipe){
+              $porcentagemEquipe = Helper::calcularValorPorcentagem(1, $metaEquipe);
+              $resultMetaEquipe = MetaCliente::where('id',$resultMeta['id'])->first();
+
+              $soma = $porcentagemEquipe + $resultMetaEquipe->mata_atingida;
+
+              MetaCliente::where('id',$resultMeta['id'])->update([
+                  'meta_atiginda_equipe' => $porcentagemEquipe,
+                  'valor_meta_equipe' => $metaEquipe,
+                  'mata_atingida' => $soma,
+              ]);
+          }
         }
-
-
     }
 }

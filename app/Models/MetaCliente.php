@@ -17,7 +17,13 @@ class MetaCliente extends Model
         'final_mes',
         'status',
         'ativo',
-        'user_id'
+        'user_id',
+        'meta_mes',
+        'valor_carteira',
+        'porcentagem_valor_carteira',
+        'meta_atiginda_equipe',
+        'valor_mes',
+        'valor_meta_equipe'
     ];
 
     public function user(){

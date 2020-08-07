@@ -42,48 +42,35 @@ class relatorioAnalista extends Command
      */
     public function handle()
     {
-        $from = date('2020-06-01');
-        $to = date('2020-06-30');
-        $roleResult = Role::where('name','Analista pleno')->first();
-        //dd($roleResult->id);
+        $from = date('2020-07-01');
+        $to = date('2020-07-31');
+        $roleResult = Role::where('name', 'Analista pleno')->first();
         $resultUser = User::with('roles')->where('role_id', $roleResult->id)->get();
 
         foreach ($resultUser as $i) {
 
-            $resultContratos = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParent($i['id']))->get();
-            $somaMeta = 0;
-            foreach($resultContratos as $item){
+            $somaMetaMes = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id', Helper::getUsuarioParent($i['id']))->sum('valor');
 
-                $somaMeta = $somaMeta + $item['valor'];
+            $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])->where('user_id', $i['id'])->first();
 
+            if ($resultMeta['meta_individual'] <= $somaMetaMes) {
+                $valorCarteira = ContratoMutuo::with('user')->whereIn('user_id', Helper::getUsuarioParent($i['id']))->sum('valor');
+
+                $porcentagemCarteira = Helper::calcularValorPorcentagem(1, $valorCarteira);
+                $totalMes = Helper::calcularValorPorcentagem(5, $somaMetaMes);
+                $soma = $porcentagemCarteira + $totalMes;
+                MetaCliente::where('id',$resultMeta['id'])->update([
+                    'mata_atingida' => $soma,
+                    'valor_mes' => $somaMetaMes,
+                    'meta_mes' => $totalMes,
+                    'valor_carteira' => $valorCarteira,
+                    'porcentagem_valor_carteira' =>  $porcentagemCarteira
+                ]);
+            } else {
+                $totalMes = Helper::calcularValorPorcentagem(5, $somaMetaMes);
+                MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $somaMetaMes]);
             }
-
-
-            $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])
-                            ->where('user_id',$i['id'] )->first();
-
-
-
-
-
-            if($resultMeta['meta_individual'] <= $somaMeta){
-                $todosContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioParent($i['id']))->get();
-                $valorCarteira = 0;
-                foreach($todosContratos as $item){
-                    $valorCarteira = $valorCarteira + $item['valor'];
-                }
-
-                   $a = Helper::calcularValorPorcentagem(1, $valorCarteira);
-                   $b = Helper::calcularValorPorcentagem(5, $somaMeta) ;
-                   $soma = $a + $b;
-                   echo "Valor Carteira: ".$a;
-                   echo "\n";
-                   echo "Valor Mês: ".$b;
-                   echo "\n";
-                   echo "Valor Total a Pagar: ".$soma;
-            }
-          }
-          exit;
+        }
 
     }
 }
