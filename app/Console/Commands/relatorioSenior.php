@@ -70,6 +70,7 @@ class relatorioSenior extends Command
             }
           }else{
               $totalMes = Helper::calcularValorPorcentagem(5, $metaIndividual);
+              echo $totalMes."\n";
               MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $metaIndividual]);
           }
 
