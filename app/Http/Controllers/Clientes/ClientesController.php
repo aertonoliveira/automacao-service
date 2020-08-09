@@ -163,7 +163,7 @@ class ClientesController extends Controller
         $input = $request->all();
 
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
-            $url = Storage::disk('s3')->put('images/avatar/'.$userAuth->id, $request->file('avatar'));
+            $url = Storage::disk('s3')->put('images/avatar/'.$userAuth->id, $request->file('avatar'),[ 'visibility' => 'public',]);
             $input['avatar'] =$url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);

@@ -20,7 +20,8 @@ class RelatorioMensal extends Model
         'comissao',
         'meta_individual',
         'meta_equipe',
-        'pagar_total'
+        'pagar_total',
+        'relatorio_mensals'
 
     ];
 

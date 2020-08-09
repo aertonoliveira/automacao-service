@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RelatorioMensal;
 use Illuminate\Http\Request;
 use App\Utils\Helper;
+use Illuminate\Support\Facades\Storage;
 
 class RelatorioMensalController extends Controller
 {
@@ -28,7 +29,14 @@ class RelatorioMensalController extends Controller
     public function atualizarStatus(Request $request, $id){
         $input = $request->all();
         $result = RelatorioMensal::find($id);
+
         $result->status =  $input['status'];
+
+        if ($request->hasFile('comprovante') && $request->file('comprovante')->isValid()) {
+            $url = Storage::disk('s3')->put('images/comporvante/' . $id, $request->file('comprovante'), ['visibility' => 'public',]);
+            $result->comprovante = $url;
+
+        }
         $result->save();
     }
 

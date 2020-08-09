@@ -17,28 +17,28 @@ class DocumentosClientesController extends Controller
         $input = $request->all();
 
         if ($request->hasFile('frente_rg') && $request->file('frente_rg')->isValid()) {
-            $url = Storage::disk('s3')->put('images/frente_rg/'.$input['user_id'], $request->file('frente_rg'));
+            $url = Storage::disk('s3')->put('images/frente_rg/'.$input['user_id'], $request->file('frente_rg'), [ 'visibility' => 'public',]);
             $input['frente_rg'] = $url;;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('verso_rg') && $request->file('verso_rg')->isValid()) {
-            $url = Storage::disk('s3')->put('images/verso_rg/'.$input['user_id'], $request->file('verso_rg'));
+            $url = Storage::disk('s3')->put('images/verso_rg/'.$input['user_id'], $request->file('verso_rg'), [ 'visibility' => 'public',]);
             $input['verso_rg'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('comprovante_residencia') && $request->file('comprovante_residencia')->isValid()) {
-            $url = Storage::disk('s3')->put('images/comprovante_residencia/'.$input['user_id'], $request->file('comprovante_residencia'));
+            $url = Storage::disk('s3')->put('images/comprovante_residencia/'.$input['user_id'], $request->file('comprovante_residencia'),[ 'visibility' => 'public',]);
             $input['comprovante_residencia'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
         }
 
         if ($request->hasFile('comprovante_pagamento') && $request->file('comprovante_pagamento')->isValid()) {
-            $url = Storage::disk('s3')->put('images/comprovante_pagamento/'.$input['user_id'], $request->file('comprovante_pagamento'));
+            $url = Storage::disk('s3')->put('images/comprovante_pagamento/'.$input['user_id'], $request->file('comprovante_pagamento'),[ 'visibility' => 'public',]);
             $input['comprovante_pagamento'] = $url;
         } else {
             return response()->json(['error' => 'Favor enviar somente imagens '], 409);
