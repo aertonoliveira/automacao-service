@@ -38,15 +38,14 @@ class ContratoMutuoController extends Controller
         $contaResult->valor =  $total;
         $contaResult->save();
 
-        if ($roleResult->name === 'Administrator' ) {
+        if ($roleResult->name == 'Administrador' ) {
             $resultCreate = ContratoMutuo::create($input);
-            $resultCreate['numero_contrato'] = str_pad($resultCreate->id, 6, 0, STR_PAD_RIGHT);
+            $resultCreate['numero_contrato'] = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
             $resultCreate->save();
         } else {
             $input['porcentagem'] = $this->calculaComissao($input['valor'], $input['porcentagem']);
-
             $resultCreate = ContratoMutuo::create($input);
-            $resultCreate['numero_contrato'] = str_pad($resultCreate->id, 6, 0, STR_PAD_RIGHT);
+            $resultCreate['numero_contrato'] = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
             $resultCreate->save();
         }
 
