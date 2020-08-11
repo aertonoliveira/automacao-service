@@ -32,11 +32,9 @@ class ContratoMutuoController extends Controller
         $datetime = Carbon::now('America/Sao_Paulo');
         $input['inicio_mes'] = $datetime->format('Y-m-d H:i:s');
         $input['final_mes'] = date("Y-m-d H:i:s", strtotime($input['tempo_contrato'] . ' month'));
-        $contaResult = SaldoConta::where('user_id',$input['user_id'])->first();
-        $total = $contaResult->valor + $input['valor'];
 
-        $contaResult->valor =  $total;
-        $contaResult->save();
+
+        dd($roleResult->name);
 
         if ($roleResult->name == 'Administrador' ) {
             $resultCreate = ContratoMutuo::create($input);
@@ -48,6 +46,10 @@ class ContratoMutuoController extends Controller
             $resultCreate['numero_contrato'] = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
             $resultCreate->save();
         }
+        $contaResult = SaldoConta::where('user_id',$input['user_id'])->first();
+        $total = $contaResult->valor + $input['valor'];
+        $contaResult->valor =  $total;
+        $contaResult->save();
 
     }
 
