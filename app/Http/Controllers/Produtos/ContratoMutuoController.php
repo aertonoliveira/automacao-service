@@ -27,7 +27,7 @@ class ContratoMutuoController extends Controller
 
         $userAuth = Auth::user();
 
-        $roleResult = Role::where('id', $userAuth->id)->first();
+        $roleResult = Role::where('id', $userAuth->role_id)->first();
         $input = $request->all();
 
         $datetime = Carbon::now('America/Sao_Paulo');
@@ -35,7 +35,7 @@ class ContratoMutuoController extends Controller
         $input['final_mes'] = date("Y-m-d H:i:s", strtotime($input['tempo_contrato'] . ' month'));
 
 
-        var_dump($roleResult);
+      
 
         if ($roleResult->name == 'Administrador' ) {
             $resultCreate = ContratoMutuo::create($input);
