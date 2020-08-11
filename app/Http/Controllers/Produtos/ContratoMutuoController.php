@@ -24,6 +24,7 @@ class ContratoMutuoController extends Controller
 
     public function create(Request $request)
     {
+        dd($request);
         $userAuth = Auth::user();
 
         $roleResult = Role::where('id', $userAuth->id)->first();
