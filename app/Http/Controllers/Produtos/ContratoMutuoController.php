@@ -35,7 +35,7 @@ class ContratoMutuoController extends Controller
         $input['final_mes'] = date("Y-m-d H:i:s", strtotime($input['tempo_contrato'] . ' month'));
 
 
-      
+
 
         if ($roleResult->name == 'Administrador' ) {
             $resultCreate = ContratoMutuo::create($input);
