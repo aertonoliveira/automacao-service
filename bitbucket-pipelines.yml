@@ -3,15 +3,19 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-bitbucket-pipelines.yml       
-image: php:7.2-fpm
-
+image: php:7.1
 pipelines:
   default:
     - step:
+        caches:
+          - composer
         script:
+          - php -v
+          - apt-get update
+          - apt-get install -y unzip git
+          - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD
           - apt-get update && apt-get install 
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - composer install
           - php artisan migrate
-        services:
+          - php artisan migrate
