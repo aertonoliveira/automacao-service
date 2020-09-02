@@ -36,6 +36,16 @@ class RolesSeeder extends Seeder
             'name'=>  'Cliente',
             'label'=>  'Cliente'
         ]);
+        DB::table('roles')->insert([
+            'name'=>  'Parceiro',
+            'label'=>  'Parceiro'
+        ]);
+        DB::table('roles')->insert([
+            'name'=>  'Tarder',
+            'label'=>  'Tarder'
+        ]);
+
+
 
 
     }
