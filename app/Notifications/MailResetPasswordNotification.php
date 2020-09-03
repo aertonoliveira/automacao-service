@@ -36,8 +36,9 @@ class MailResetPasswordNotification extends ResetPassword
      */
     public function toMail($notifiable)
     {
-        $frontendLink = config('url.frontend_url') . '/password/reset?token=' . $this->token;
+        $frontendLink = config('url.frontend_url') . 'auth/reset-password/' . $this->token;
         return ( new MailMessage )
+            ->greeting('Recuperar Senha')
             ->subject( 'Alteração de senha' )
             ->line( "Olá! Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta." )
             ->action( 'Redefinir senha', $frontendLink )
