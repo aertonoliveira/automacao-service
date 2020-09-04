@@ -37,14 +37,16 @@ class ContratoMutuoController extends Controller
 
 
 
-        if ($roleResult->name == 'Administrador' ) {
-            $resultCreate = ContratoMutuo::create($input);
-            $resultCreate['numero_contrato'] = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
+        if ($roleResult->name == 'Administrador' || $roleResult->name == 'Diretoria' ) {
+            $resultCreate                      = ContratoMutuo::create($input);
+            $resultCreate['numero_contrato']   = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
+            $resultCreate['valor_atualizado']  = $input['valor'];
             $resultCreate->save();
         } else {
-            $input['porcentagem'] = $this->calculaComissao($input['valor'], $input['porcentagem']);
-            $resultCreate = ContratoMutuo::create($input);
-            $resultCreate['numero_contrato'] = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
+            $input['porcentagem']             = $this->calculaComissao($input['valor'], $input['porcentagem']);
+            $resultCreate                     = ContratoMutuo::create($input);
+            $resultCreate['numero_contrato']  = str_pad($resultCreate->id.$datetime->format('m').$datetime->format('d'), 6, 0, STR_PAD_RIGHT);
+            $resultCreate['valor_atualizado'] = $input['valor'];
             $resultCreate->save();
         }
         $contaResult = SaldoConta::where('user_id',$input['user_id'])->first();
@@ -97,7 +99,7 @@ class ContratoMutuoController extends Controller
                 return $this->repository->with('user')->paginate(10);
             }
 
-        }else if(Helper::getUsuarioAuthTipo() === "Analista Senior" ||  Helper::getUsuarioAuthTipo() === "Analista pleno"){
+        }else if(Helper::getUsuarioAuthTipo() === "Analista Senior" ||  Helper::getUsuarioAuthTipo() === "Analista pleno" ||  Helper::getUsuarioAuthTipo() === "Parceiro"){
             $resultContratos = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioAuthParent())->paginate(10);
             return response()->json($resultContratos, 201);
         }else{
