@@ -41,37 +41,44 @@ class relatorioSenior extends Command
      */
     public function handle()
     {
-        $from = date('2020-07-01');
-        $to = date('2020-07-31');
+        $from = date('2020-08-01');
+        $to = date('2020-08-31');
         $resultUser = User::with('roles')->where('role_id',4)->get();
 
         foreach ($resultUser as $i) {
             $metaIndividual = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParentClientes($i['id']))->sum('valor');
             $metaEquipe = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id',Helper::getUsuarioParentAnalistas($i['id']))->sum('valor');
             $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])->where('user_id',$i['id'] )->first();
-            echo Helper::calcularValorPorcentagem(7, $metaIndividual);
+
           if($i['roles'][0]['name'] != 'Cliente' &&   $i['roles'][0]['name'] != 'Diretor' && $i['roles'][0]['name'] != 'Administrador' ) {
 
-            if($resultMeta['meta_individual'] <= $metaIndividual){
-                $valorCarteira = ContratoMutuo::with('user')->whereIn('user_id',Helper::getUsuarioParent($i['id']))->sum('valor');
-                   $valorCarteira = $valorCarteira - $metaIndividual;
-                   $porcentagemCarteira = Helper::calcularValorPorcentagem(1, $valorCarteira);
-                   $porcentagemIndividual = Helper::calcularValorPorcentagem(7, $metaIndividual) ;
-                   $soma = $porcentagemCarteira + $porcentagemIndividual;
+              if ($resultMeta['meta_individual'] <= $metaIndividual) {
+                  $valorCarteira = ContratoMutuo::with('user')->whereIn('user_id', Helper::getUsuarioParent($i['id']))->sum('valor');
+                  $valorCarteira = $valorCarteira - $metaIndividual;
+                  $porcentagemCarteira = Helper::calcularValorPorcentagem(1, $valorCarteira);
+                  $porcentagemIndividual = Helper::calcularValorPorcentagem(7, $metaIndividual);
+                  $soma = $porcentagemCarteira + $porcentagemIndividual;
 
 
-                MetaCliente::where('id',$resultMeta['id'])->update([
-                    'mata_atingida' => $soma,
-                    'valor_mes' => $metaIndividual,
-                    'meta_mes' => $porcentagemIndividual,
-                    'valor_carteira' => $valorCarteira,
-                    'porcentagem_valor_carteira' =>  $porcentagemCarteira
-                ]);
-            }
-          }else{
-              $totalMes = Helper::calcularValorPorcentagem(7, $metaIndividual);
-              echo $totalMes."\n";
-              MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $metaIndividual]);
+                  MetaCliente::where('id', $resultMeta['id'])->update([
+                      'mata_atingida' => $soma,
+                      'valor_mes' => $metaIndividual,
+                      'meta_mes' => $porcentagemIndividual,
+                      'valor_carteira' => $valorCarteira,
+                      'porcentagem_valor_carteira' => $porcentagemCarteira
+                  ]);
+
+
+              } else {
+                  $totalMes = Helper::calcularValorPorcentagem(7, $metaIndividual);
+                  echo Helper::calcularValorPorcentagem(7, $metaIndividual) . "\n";
+                  echo $i['id'] . "\n";
+                  echo $i['name'] . "\n";
+                  echo "Meta Individual:" . $metaIndividual . "\n";
+                  echo "Meta Individual:" . $resultMeta['meta_individual'];
+
+                  MetaCliente::where('id', $resultMeta['id'])->update(['mata_atingida' => $totalMes, 'valor_mes' => $metaIndividual]);
+              }
           }
 
           if($resultMeta['meta_equipe'] <= $metaEquipe){

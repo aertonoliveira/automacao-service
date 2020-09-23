@@ -42,15 +42,14 @@ class relatorioAnalista extends Command
      */
     public function handle()
     {
-        $from = date('2020-07-01');
-        $to = date('2020-07-31');
+        $from = date('2020-08-01');
+        $to = date('2020-08-31');
         $roleResult = Role::where('name', 'Analista pleno')->first();
         $resultUser = User::with('roles')->where('role_id', $roleResult->id)->get();
 
         foreach ($resultUser as $i) {
 
             $somaMetaMes = ContratoMutuo::with('user')->whereBetween('inicio_mes', [$from, $to])->whereIn('user_id', Helper::getUsuarioParent($i['id']))->sum('valor');
-
             $resultMeta = MetaCliente::whereBetween('inicio_mes', [$from, $to])->where('user_id', $i['id'])->first();
 
             if ($resultMeta['meta_individual'] <= $somaMetaMes) {

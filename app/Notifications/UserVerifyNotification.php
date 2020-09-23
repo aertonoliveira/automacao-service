@@ -45,7 +45,7 @@ class UserVerifyNotification extends Notification
         return (new MailMessage)
                     ->subject( 'Account Verification' )
                     ->line('Hello! Please click the button below to verify your email address.')
-                    ->action('Notification Action', url("/api/auth/verify?email=". $notifiable->email . "&token=" . $this->token ))
+                    ->action('Notification Action')
                     ->line('If you did not create an account, no further action is required.');
     }
 

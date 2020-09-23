@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Clientes;
 
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Clientes\StoreCLienteRequest;
 use App\Http\Resources\User as UserResource;
 use App\Models\Arquivo;
 use App\Models\DocumentosClientes;
@@ -21,42 +22,79 @@ use Illuminate\Support\Facades\Storage;
 
 class ClientesController extends Controller
 {
-    public function create(Request $request)
+
+    private $repository;
+
+    public function __construct(User $user)
     {
-        $userAuth = Auth::user();
+        $this->repository = $user;
+    }
 
-        $input = $request->all();
+    public function create(StoreCLienteRequest $request)
+    {
+        try {
+            $userAuth = Auth::user();
+            $user = new User();
+            $input = $request->all();
 
-        $input['password'] = bcrypt($input['password']);
-        $input['user_parent_id'] = $userAuth->id;
-
-        $userAuth = Auth::user();
-
-        $roleResult = Role::where('id', $userAuth->id)->first();
-        $result = Role::where('name',$input['role_id'])->first();
-
-        $input['role_id'] = $result->id;
-
-        $user = User::create($input);
-
-        DB::table('role_user')->insert([
-            'user_id' =>  $user->id,
-            'role_id' =>  $input['role_id']
-        ]);
-
-        $saldo['user_id'] = $user->id;
-        $saldo['valor'] = 0;
-        SaldoConta::create($saldo);
+//            'name', 'email', 'password', 'email_verified_at','user_parent_id',
+//        'rg', 'data_emissao', 'orgao_emissor', 'cpf', 'data_nascimento',
+//        'estado_civil', 'nome_mae',  'genero', 'profissao', 'rua', 'numero',
+//        'bairro', 'cidade', 'estado', 'complemento', 'cep', 'telefone',
+//        'celular','role_id','avatar'
 
 
-        if(config('url.account_verify')){
-            // Email Verification
+            $user->password = bcrypt($request->password);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->user_parent_id = $userAuth->id;
+            $user->rg = $request->rg;
+            $user->data_emissao = $request->data_emissao;
+            $user->orgao_emissor = $request->orgao_emissor;
+            $user->cpf = $request->cpf;
+            $user->data_nascimento = $request->data_nascimento;
+            $user->estado_civil = $request->estado_civil;
+            $user->nome_mae = $request->nome_mae;
+            $user->genero = $request->genero;
+            $user->rua = $request->rua;
+            $user->numero = $request->numero;
+            $user->bairro = $request->bairro;
+            $user->cidade = $request->cidade;
+            $user->estado = $request->estado;
+            $user->complemento = $request->complemento;
+            $user->cep = $request->cep;
+            $user->telefone = $request->telefone;
+            $user->celular = $request->celular;
+            $user->role_id = $request->role_id;
+
+            $user->save();
+
+            DB::table('role_user')->insert([
+                'user_id' =>  $user->id,
+                'role_id' =>  $input['role_id']
+            ]);
+            $saldo['user_id'] = $user->id;
+            $saldo['valor'] = 0;
+            SaldoConta::create($saldo);
             $user->notify(new UserVerifyNotification( $input['email'], $input['password']));
 
-            return response()->json(['data' => $user], 200);
+            return [
+                'status_code' => 200,
+                'data' => $user
+            ];
+        } catch (\Exception $error) {
+            return [
+                'status_code' => 400,
+                'message' => $error->getMessage()
+            ];
         }
 
-        return response()->json(['data' => $user], 200);
+
+
+
+
+
+
 
     }
 
@@ -90,16 +128,11 @@ class ClientesController extends Controller
                 $cliente->ativo = true;
                 $cliente->save();
                 return response()->json(['success' => "Ativado com sucesso!"], 201);
-
             }else{
                 $cliente->ativo = false;
                 $cliente->save();
                 return response()->json(['success' => "Desativado com sucesso!"], 201);
-
             }
-
-
-
         }else{
             return response()->json(['error' => "Você não tem permissão para ativar"], 404);
         }
@@ -149,6 +182,7 @@ class ClientesController extends Controller
     public function getRelatorioClientes(){
         $resultUser['senior'] = User::where('role_id',4)->count();
         $resultUser['pleno'] = User::where('role_id',5)->count();
+        $resultUser['parceiros'] = User::where('role_id',7)->count();
         $resultUser['clientes'] = User::where('role_id',6)->count();
         $resultUser['valor_total'] = DB::table("contrato_mutuos")->where('ativo',true)->get()->sum("valor");
 

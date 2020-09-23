@@ -9,6 +9,21 @@ use App\Http\Controllers\Controller;
 
 class MetaClienteController extends Controller
 {
+    private $repository;
+
+    public function __construct(MetaCliente $relatorio)
+    {
+        $this->repository = $relatorio;
+    }
+
+    public function index(Request $request)
+    {
+        if ($request->query()) {
+            return $this->repository->search($request->query());
+        } else {
+            return $this->repository->with( 'user.contaBancaria.banco')->orderBy('id')->paginate(10);
+        }
+    }
     public function create(Request $request){
 
         $input = $request->all();

@@ -47,8 +47,8 @@ class criarMeta extends Command
 //        'status',
 //        'ativo',
 //        meta_individual
-        $from = date('2020-07-01');
-        $to = date('2020-07-31');
+        $from = date('2020-08-01');
+        $to = date('2020-08-31');
         $resultUser = User::with('roles')->get();
 
         foreach ($resultUser as $i) {
@@ -56,10 +56,10 @@ class criarMeta extends Command
             $input['inicio_mes']    =   $from;
             $input['final_mes']     =   $to;
             $input['ativo']         =   true;
-
            if($i['roles'][0]['name'] == 'Gestor de analista'){
                $input['meta_individual']    = 5000;
                $input['meta_equipe']    = 1000000;
+
                MetaCliente::create($input);
            }else if($i['roles'][0]['name'] == 'Analista pleno'){
                 $input['meta_individual']   = 20000;
@@ -68,7 +68,10 @@ class criarMeta extends Command
                $input['meta_individual']    = 35000;
                $input['meta_equipe']    = 200000;
                MetaCliente::create($input);
-            }
+           }else if($i['roles'][0]['name'] == 'Parceiro'){
+               $input['meta_individual']   = 50000;
+               MetaCliente::create($input);
+           }
             $input['meta_equipe'] = 0;
         }
 

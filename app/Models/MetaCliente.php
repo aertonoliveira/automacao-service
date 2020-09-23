@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\User;
+use App\Utils\Helper;
 use Illuminate\Database\Eloquent\Model;
 
 class MetaCliente extends Model
@@ -22,9 +24,25 @@ class MetaCliente extends Model
         'valor_carteira',
         'porcentagem_valor_carteira',
         'meta_atiginda_equipe',
+        'valor_parceiro',
         'valor_mes',
         'valor_meta_equipe'
     ];
+
+    public function search ($filter,$quantidadeItens = 15)
+    {
+        $relatorio = $this->with('user.contaBancaria.banco')->where(function ($query) use ($filter) {
+            if (isset($filter['cpf'])){
+                $userResult = User::where('cpf',$filter['cpf'])->first();
+                $query->where('user_id', $userResult->id);
+            }
+            if (isset($filter['data'])){
+                $query->whereBetween('inicio_mes', Helper::retornaIntervaloDatas($filter['data']));
+            }
+        })->paginate(10);
+
+        return $relatorio;
+    }
 
     public function user(){
         return $this->belongsTo('App\User','user_id', 'id');
