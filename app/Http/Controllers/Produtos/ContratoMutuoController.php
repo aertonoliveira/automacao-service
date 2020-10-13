@@ -147,7 +147,7 @@ class ContratoMutuoController extends Controller
             ->download('contratoMutuo.pdf');
     }
 
-    public function totalPorMes(){
-
-    }
+//    public function totalPorMes(){
+//
+//    }
 }
