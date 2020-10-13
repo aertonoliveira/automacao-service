@@ -121,7 +121,21 @@ class ContratoMutuoController extends Controller
     }
 
     public function ativarContrato($id){
+        $contrato = ContratoMutuo::find($id);
 
+
+
+
+        if(!$contrato->ativo){
+            $start = new \Carbon\Carbon($contrato->inicio_mes);
+            dd($start);
+            $contrato->inicio_mes = date("Y-m-d H:i:s", strtotime('5 days'));
+            $contrato->final_mes = date("Y-m-d H:i:s", strtotime($contrato->tempo_contrato . ' month'));
+            dd($contrato);
+            $contrato->ativo = true;
+            $contrato->save();
+            return response()->json(['success' => "Ativado com sucesso!"], 201);
+        }
     }
 
     public function gerarPdf($id){
@@ -131,5 +145,9 @@ class ContratoMutuoController extends Controller
         return \PDF::loadView('contratoMutuo', compact('contrato'))
             // Se quiser que fique no formato a4 retrato: ->setPaper('a4', 'landscape')
             ->download('contratoMutuo.pdf');
+    }
+
+    public function totalPorMes(){
+
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Clientes\StoreCLienteRequest;
 use App\Http\Resources\User as UserResource;
 use App\Models\Arquivo;
+use App\Models\ContratoMutuo;
 use App\Models\DocumentosClientes;
 use App\Models\Role;
 use App\Models\SaldoConta;
@@ -36,13 +37,6 @@ class ClientesController extends Controller
             $userAuth = Auth::user();
             $user = new User();
             $input = $request->all();
-
-//            'name', 'email', 'password', 'email_verified_at','user_parent_id',
-//        'rg', 'data_emissao', 'orgao_emissor', 'cpf', 'data_nascimento',
-//        'estado_civil', 'nome_mae',  'genero', 'profissao', 'rua', 'numero',
-//        'bairro', 'cidade', 'estado', 'complemento', 'cep', 'telefone',
-//        'celular','role_id','avatar'
-
 
             $user->password = bcrypt($request->password);
             $user->name = $request->name;
@@ -180,6 +174,15 @@ class ClientesController extends Controller
     }
 
     public function getRelatorioClientes(){
+
+        $from = date('2020-09-01');
+        $to = date('2020-09-30');
+        $simples = ContratoMutuo::where('tipo_contrato','Simples')->pluck('id');
+        $composto = ContratoMutuo::where('tipo_contrato','Composto')->pluck('id');
+        $resultUser['valor_total_simples'] = \App\Models\RelatorioMensal::whereIn('contrato_id',$simples)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
+        $resultUser['valor_total_composto'] = \App\Models\RelatorioMensal::whereIn('contrato_id',$composto)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
+
+
         $resultUser['senior'] = User::where('role_id',4)->count();
         $resultUser['pleno'] = User::where('role_id',5)->count();
         $resultUser['parceiros'] = User::where('role_id',7)->count();

@@ -80,6 +80,8 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
         Route::get('produto', 'ContratoMutuoController@listProdutos');
         Route::get('produto/cliente', 'ContratoMutuoController@contratosClientesLogado');
         Route::get('produto/{id}', 'ContratoMutuoController@listProdutosCliente');
+        Route::put('produto/{id}', 'ContratoMutuoController@ativarContrato');
+
 
     });
 });
