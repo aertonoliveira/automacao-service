@@ -97,5 +97,10 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
 Route::group(['namespace' => 'Produtos'], function () {
     Route::get('produto/pdf/{id}', 'ContratoMutuoController@gerarPdf');
 });
-
-
+Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
+    Route::group(['namespace' => 'bancas'], function () {
+        Route::post('banca', 'BancasController@create');
+        Route::post('banca/trader', 'BancasController@createBancaTrader');
+        Route::get('traders', 'BancasController@listTrader');
+    });
+});
