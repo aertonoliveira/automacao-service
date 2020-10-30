@@ -42,6 +42,8 @@ class FornecedoresController extends Controller
     }
 
     public function update(StoreFornecedorRequest $request,$id){
+        $userAuth = Auth::user();
+        
         $input = $request->all();
 
         $fornecedor = Fornecedor::find($id);
