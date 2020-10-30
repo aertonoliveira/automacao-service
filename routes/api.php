@@ -115,3 +115,12 @@ Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
         Route::post('fornecedor/{id}', 'FornecedoresController@destroy');
     });
 });
+
+Route::group(['middleware' => ['jwt', 'jwt.auth']], function () {
+    Route::group(['namespace' => 'financeiro'], function () {
+        Route::get('conta', 'ContasController@index');
+        Route::post('conta', 'ContasController@create');
+        Route::post('conta/update/{id}', 'ContasController@update');
+        Route::post('conta/{id}', 'ContasController@destroy');
+    });
+});
