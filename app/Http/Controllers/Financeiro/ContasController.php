@@ -21,9 +21,7 @@ class ContasController extends Controller
 
     public function index(Request $request){
 
-        $userAuth = Auth::user();
-
-        $result = FinanceiroConta::paginate(10);
+        $result = $this->repository::paginate(10);
 
         return response()->json($result, 200);
 
@@ -31,9 +29,6 @@ class ContasController extends Controller
 
     public function create(StoreContasRequest $request)
     {
-
-        $userAuth = Auth::user();
-
         $input = $request->all();
 
         if ($request->hasFile('comprovante') && $request->file('comprovante')->isValid()) {
@@ -43,18 +38,17 @@ class ContasController extends Controller
             return response()->json(['error' => 'Favor enviar somente imagens'], 409);
         }
 
-        $resultCreate = FinanceiroConta::create($input);
+        $resultCreate = $this->repository::create($input);
 
         return response()->json($resultCreate, 200);
 
     }
 
     public function update(StoreContasRequest $request,$id){
-        $userAuth = Auth::user();
         
         $input = $request->all();
 
-        $conta = FinanceiroConta::find($id);
+        $conta = $this->repository::find($id);
 
         if($conta){
 

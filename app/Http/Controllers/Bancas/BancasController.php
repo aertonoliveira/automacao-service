@@ -20,17 +20,14 @@ class BancasController extends Controller
 {
     private $repository;
 
-    public function __construct(User $user)
+    public function __construct(Banca $banca)
     {
-        $this->repository = $user;
+        $this->repository = $banca;
     }
 
     public function create(StoreBancaRequest $request)
     {
         try {
-            $userAuth = Auth::user();
-
-
             $new = $request->all();
             $new['data_pagamento'] = Carbon::now();
             $new['status'] = true;
@@ -43,7 +40,7 @@ class BancasController extends Controller
             }
             
 
-            $resultCreate = Banca::create($new);
+            $resultCreate = $this->repository::create($new);
 
             return response()->json($resultCreate, 200);
 
@@ -58,11 +55,9 @@ class BancasController extends Controller
     public function createBancaTrader(StoreBancaTradeRequest $request)
     {
         try {
-            $userAuth = Auth::user();
-
 
             $new = $request->all();
-            $new['banca_id'] = Banca::where('user_id', $userAuth->id)->first()->id;
+            $new['banca_id'] = $this->repository::where('user_id', $userAuth->id)->first()->id;
             $new['data_pagamento'] = Carbon::now();
             $new['status'] = true;
 
@@ -90,8 +85,6 @@ class BancasController extends Controller
     public function listTrader()
     {
         try {
-            $userAuth = Auth::user();
-
 
             $roleResult = User::with('roles')->where('role_id', 8)->get();
 

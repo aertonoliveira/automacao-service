@@ -20,9 +20,7 @@ class FornecedoresController extends Controller
 
     public function index(Request $request){
 
-        $userAuth = Auth::user();
-
-        $result = Fornecedor::paginate(10);
+        $result = $this->repository::paginate(10);
 
         return response()->json($result, 200);
 
@@ -31,22 +29,19 @@ class FornecedoresController extends Controller
     public function create(StoreFornecedorRequest $request)
     {
 
-        $userAuth = Auth::user();
-
         $input = $request->all();
 
-        $resultCreate = Fornecedor::create($input);
+        $resultCreate = $this->repository::create($input);
 
         return response()->json($resultCreate, 200);
 
     }
 
     public function update(StoreFornecedorRequest $request,$id){
-        $userAuth = Auth::user();
         
         $input = $request->all();
 
-        $fornecedor = Fornecedor::find($id);
+        $fornecedor = $this->repository::find($id);
 
         if($fornecedor){
             $result  = $fornecedor->update($input);

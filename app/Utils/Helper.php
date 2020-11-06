@@ -2,11 +2,12 @@
 
 namespace App\Utils;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\User;
-use Carbon\Carbon;
 use DateTime;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Models\FinanceiroConta;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -102,5 +103,42 @@ class Helper extends Controller
         $inicio = date($ano.'-'.$mes.'-01');
         $fim = date($ano.'-'.$mes.'-'.$finalMes);
         return[$inicio,$fim];
+    }
+
+    static function retornarTipoID($tipoRegistro){
+        switch ($tipoRegistro) {
+            case 1:
+                return 'relatorio_id';
+                break;
+            case 2:
+                return 'contrato_id';
+                break;
+            case 3:
+                return 'fornecedor_id';
+                break;
+            case 4:
+                return 'meta_cliente_id';
+                break;
+            case 5:
+                return 'banca_id';
+                break;
+        }
+    }
+
+    static function registroContas($obj) {
+        $new = $obj;
+        $new[this.retornarTipoID($obj['tipo_registro'])] = $obj['id'];
+        unset($new['id']);
+
+        $userAuth = Auth::user();
+
+        if ($new->hasFile('comprovante') && $new->file('comprovante')->isValid()) {
+            $url = Storage::disk('s3')->put('images/financeiro/comprovantes/'.$userAuth->id, $new->file('comprovante'),[ 'visibility' => 'public',]);
+            $new['comprovante'] = $url;
+        } else if ($new->file('comprovante')) {
+            return response()->json(['error' => 'Favor enviar somente imagens'], 409);
+        }
+
+        return FinanceiroConta::create($new);
     }
 }
