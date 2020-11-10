@@ -31,6 +31,7 @@ class UpdateFncContasTable extends Migration
     {
         Schema::table('fnc_contas', function (Blueprint $table) {
             $table->dropColumn('user_id');
+            $table->dropColumn('registro_id');
         });
     }
 }
