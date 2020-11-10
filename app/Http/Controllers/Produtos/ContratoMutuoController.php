@@ -54,6 +54,18 @@ class ContratoMutuoController extends Controller
         $contaResult->valor =  $total;
         $contaResult->save();
 
+        $objConta = [
+            'id' => $contaResult->id,
+            'titulo' => 'Conta de Contrato Mutuo',
+            'valor' => $total,
+            'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+            'tipo_registro' => 2, //contrato
+            'tipo_conta' => 2, // a receber
+        ];
+
+        $helper = new Helper();
+        $helper->registroContas($objConta);
+
     }
 
     public function calculaComissao($valor,$porcentagem)

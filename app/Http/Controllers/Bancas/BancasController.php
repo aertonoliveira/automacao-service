@@ -14,6 +14,7 @@ use App\User;
 use App\Banca;
 use App\BancaTrader;
 use Carbon\Carbon;
+use App\Utils\Helper;
 
 
 class BancasController extends Controller
@@ -28,6 +29,8 @@ class BancasController extends Controller
     public function create(StoreBancaRequest $request)
     {
         try {
+            $userAuth = Auth::user();
+
             $new = $request->all();
             $new['data_pagamento'] = Carbon::now();
             $new['status'] = true;
@@ -41,6 +44,18 @@ class BancasController extends Controller
             
 
             $resultCreate = $this->repository::create($new);
+
+            $objConta = [
+                'id' => $resultCreate->id,
+                'titulo' => 'Conta de Bancas',
+                'valor' => $new['valor'],
+                'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                'tipo_registro' => 5, //bancas
+                'tipo_conta' => 2, // a receber
+            ];
+
+            $helper = new Helper();
+            $helper->registroContas($objConta);
 
             return response()->json($resultCreate, 200);
 
@@ -56,6 +71,8 @@ class BancasController extends Controller
     {
         try {
 
+            $userAuth = Auth::user();
+            
             $new = $request->all();
             $new['banca_id'] = $this->repository::where('user_id', $userAuth->id)->first()->id;
             $new['data_pagamento'] = Carbon::now();

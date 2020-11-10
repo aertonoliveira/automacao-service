@@ -125,19 +125,10 @@ class Helper extends Controller
         }
     }
 
-    static function registroContas($obj) {
+    public function registroContas($obj) {
         $new = $obj;
-        $new[this.retornarTipoID($obj['tipo_registro'])] = $obj['id'];
+        $new[$this->retornarTipoID($obj['tipo_registro'])] = $obj['id'];
         unset($new['id']);
-
-        $userAuth = Auth::user();
-
-        if ($new->hasFile('comprovante') && $new->file('comprovante')->isValid()) {
-            $url = Storage::disk('s3')->put('images/financeiro/comprovantes/'.$userAuth->id, $new->file('comprovante'),[ 'visibility' => 'public',]);
-            $new['comprovante'] = $url;
-        } else if ($new->file('comprovante')) {
-            return response()->json(['error' => 'Favor enviar somente imagens'], 409);
-        }
 
         return FinanceiroConta::create($new);
     }

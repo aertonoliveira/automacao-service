@@ -65,9 +65,34 @@ class relatorioAnalista extends Command
                     'valor_carteira' => $valorCarteira,
                     'porcentagem_valor_carteira' =>  $porcentagemCarteira
                 ]);
+
+                $objConta = [
+                    'id' => $resultMeta->id,
+                    'titulo' => 'Conta de Relatório Analista',
+                    'valor' => $totalMes,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                ];
+
+                $helper = new Helper();
+                $helper->registroContas($objConta);
+
             } else {
                 $totalMes = Helper::calcularValorPorcentagem(5, $somaMetaMes);
                 MetaCliente::where('id',$resultMeta['id'])->update(['mata_atingida' => $totalMes,'valor_mes' => $somaMetaMes]);
+
+                $objConta = [
+                    'id' => $resultMeta->id,
+                    'titulo' => 'Conta de Relatório Analista',
+                    'valor' => $totalMes,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                ];
+
+                $helper = new Helper();
+                $helper->registroContas($objConta);
             }
         }
 

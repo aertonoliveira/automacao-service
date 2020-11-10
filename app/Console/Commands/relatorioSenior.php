@@ -68,6 +68,16 @@ class relatorioSenior extends Command
                       'porcentagem_valor_carteira' => $porcentagemCarteira
                   ]);
 
+                  $objConta = [
+                    'titulo' => 'Conta de Relatório Senior',
+                    'valor' => $soma,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                    ];
+
+                    Helper::registroContas($objConta);
+
 
               } else {
                   $totalMes = Helper::calcularValorPorcentagem(7, $metaIndividual);
@@ -78,6 +88,16 @@ class relatorioSenior extends Command
                   echo "Meta Individual:" . $resultMeta['meta_individual'];
 
                   MetaCliente::where('id', $resultMeta['id'])->update(['mata_atingida' => $totalMes, 'valor_mes' => $metaIndividual]);
+
+                  $objConta = [
+                    'titulo' => 'Conta de Relatório Senior',
+                    'valor' => $totalMes,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                    ];
+
+                    Helper::registroContas($objConta);
               }
           }
 
@@ -92,6 +112,19 @@ class relatorioSenior extends Command
                   'valor_meta_equipe' => $metaEquipe,
                   'mata_atingida' => $soma,
               ]);
+
+              $objConta = [
+                    'id' => $resultMeta['id'],
+                    'titulo' => 'Conta de Relatório Senior',
+                    'valor' => $soma,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                ];
+
+              $helper = new Helper();
+              $helper->registroContas($objConta);
+
           }
         }
     }

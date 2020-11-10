@@ -65,6 +65,19 @@ class RelatorioParceiro extends Command
                     ]);
 
                     MetaCliente::where('id', $resultMetaPleno['id'])->update(['mata_atingida' => $soma, 'valor_parceiro' => $valorPleno]);
+
+                    $objConta = [
+                    'id' => $resultMetaPleno['id'],    
+                    'titulo' => 'Conta de Relatório Parceiro',
+                    'valor' => $totalMes,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                    ];
+
+                    $helper = new Helper();
+                    $helper->registroContas($objConta);
+
                 } else {
                     $totalMes = Helper::calcularValorPorcentagem(1, $metaIndividual);
                     $valorPleno = Helper::calcularValorPorcentagem(1, $metaIndividual);
@@ -73,6 +86,19 @@ class RelatorioParceiro extends Command
                     MetaCliente::where('id', $resultMeta['id'])->update(['mata_atingida' => $totalMes, 'valor_mes' => $metaIndividual]);
                     $soma = $resultMetaPleno['mata_atingida'] + $valorPleno;
                     MetaCliente::where('id', $resultMetaPleno['id'])->update(['mata_atingida' => $soma, 'valor_parceiro' => $valorPleno]);
+
+                    $objConta = [
+                        'id' => $resultMetaPleno['id'],    
+                        'titulo' => 'Conta de Relatório Parceiro',
+                        'valor' => $totalMes,
+                        'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                        'tipo_registro' => 1, //relatorio
+                        'tipo_conta' => 1, // a pagar
+                    ];
+
+                    $helper = new Helper();
+                    $helper->registroContas($objConta);
+                    
                 }
             }
 

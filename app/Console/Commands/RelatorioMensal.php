@@ -100,7 +100,19 @@ class RelatorioMensal extends Command
 
 
 
-                \App\Models\RelatorioMensal::create($input);
+                $relatorioCreate = \App\Models\RelatorioMensal::create($input);
+
+                $objConta = [
+                    'id' => $relatorioCreate->id,
+                    'titulo' => 'Conta de Relatório Mensal',
+                    'valor' => $valorSomado,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                ];
+
+                $helper = new Helper();
+                $helper->registroContas($objConta);
 
 
 //                dd($input);
@@ -152,7 +164,19 @@ class RelatorioMensal extends Command
 
 
 
-                \App\Models\RelatorioMensal::create($input);
+                $relatorioCreate = \App\Models\RelatorioMensal::create($input);
+
+                $objConta = [
+                    'id' => $relatorioCreate->id,
+                    'titulo' => 'Conta de Relatório Mensal',
+                    'valor' => $valorSomado,
+                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
+                    'tipo_registro' => 1, //relatorio
+                    'tipo_conta' => 1, // a pagar
+                ];
+
+                $helper = new Helper();
+                $helper->registroContas($objConta);
 
 
 
