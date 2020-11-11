@@ -41,8 +41,8 @@ class relatorioSenior extends Command
      */
     public function handle()
     {
-        $from = date('2020-08-01');
-        $to = date('2020-08-31');
+        $from = date('2020-10-01');
+        $to = date('2020-10-31');
         $resultUser = User::with('roles')->where('role_id',4)->get();
 
         foreach ($resultUser as $i) {

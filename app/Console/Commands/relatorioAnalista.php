@@ -42,8 +42,8 @@ class relatorioAnalista extends Command
      */
     public function handle()
     {
-        $from = date('2020-09-01');
-        $to = date('2020-09-30');
+        $from = date('2020-10-01');
+        $to = date('2020-10-31');
         $roleResult = Role::where('name', 'Analista pleno')->first();
         $resultUser = User::with('roles')->where('role_id', $roleResult->id)->get();
 
@@ -57,9 +57,9 @@ class relatorioAnalista extends Command
 
                 $porcentagemCarteira = Helper::calcularValorPorcentagem(1, $valorCarteira);
                 $totalMes = Helper::calcularValorPorcentagem(5, $somaMetaMes);
-                $soma = $porcentagemCarteira + $totalMes;
+                $somaPagamento = $porcentagemCarteira + $totalMes;
                 MetaCliente::where('id',$resultMeta['id'])->update([
-                    'mata_atingida' => $soma,
+                    'mata_atingida' => $somaPagamento,
                     'valor_mes' => $somaMetaMes,
                     'meta_mes' => $totalMes,
                     'valor_carteira' => $valorCarteira,

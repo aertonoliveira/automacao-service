@@ -41,8 +41,8 @@ class RelatorioParceiro extends Command
      */
     public function handle()
     {
-        $from = date('2020-09-01');
-        $to = date('2020-09-30');
+        $from = date('2020-10-01');
+        $to = date('2020-10-31');
         $resultUser = User::with('roles')->where('role_id',7)->get();
 
         foreach ($resultUser as $i) {
