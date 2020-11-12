@@ -35,7 +35,6 @@ class RelatorioMensalController extends Controller
         if ($request->hasFile('comprovante') && $request->file('comprovante')->isValid()) {
             $url = Storage::disk('s3')->put('images/comporvante/' . $id, $request->file('comprovante'), ['visibility' => 'public',]);
             $result->comprovante = $url;
-
         }
         $result->save();
     }
