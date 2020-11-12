@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\ContratoMutuo;
 use App\Models\MetaCliente;
 use App\Models\Role;
+use Carbon\Carbon;
 use App\User;
 use App\Utils\Helper;
 use Illuminate\Console\Command;
@@ -65,16 +66,16 @@ class relatorioAnalista extends Command
                     'valor_carteira' => $valorCarteira,
                     'porcentagem_valor_carteira' =>  $porcentagemCarteira
                 ]);
+                
+                
+                $objConta['id'] = $resultMeta->id;
+                $objConta['titulo'] = 'Conta de Relatório Analista';
+                $objConta['valor'] = $totalMes;
+                $objConta['data_vencimento'] = Carbon::now()->addDay(10)->toDateString();
+                $objConta['tipo_registro'] = 1;
+                $objConta['tipo_conta'] = 1;
 
-                $objConta = [
-                    'id' => $resultMeta->id,
-                    'titulo' => 'Conta de Relatório Analista',
-                    'valor' => $totalMes,
-                    'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
-                    'tipo_registro' => 1, //relatorio
-                    'tipo_conta' => 1, // a pagar
-                ];
-
+              
                 $helper = new Helper();
                 $helper->registroContas($objConta);
 

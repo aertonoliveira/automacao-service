@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\ContratoMutuo;
 use App\Models\MetaCliente;
 use App\User;
+use Carbon\Carbon;
 use App\Utils\Helper;
 use Illuminate\Console\Command;
 
@@ -101,11 +102,6 @@ class RelatorioParceiro extends Command
                     
                 }
             }
-
-
-
-
-
         }
     }
 }
