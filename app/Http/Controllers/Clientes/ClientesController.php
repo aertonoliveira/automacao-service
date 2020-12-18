@@ -177,8 +177,8 @@ class ClientesController extends Controller
 
         $from = date('2020-11-01');
         $to = date('2020-11-30');
-        $simples = ContratoMutuo::where('tipo_contrato','Simples')->where('ativo',true)->pluck('id');
-        $composto = ContratoMutuo::where('tipo_contrato','Composto')->where('ativo',true)->pluck('id');
+        $simples = ContratoMutuo::where('tipo_contrato','Simples')->pluck('id');
+        $composto = ContratoMutuo::where('tipo_contrato','Composto')->pluck('id');
         $resultUser['valor_total_simples'] = \App\Models\RelatorioMensal::whereIn('contrato_id',$simples)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
         $resultUser['valor_total_composto'] = \App\Models\RelatorioMensal::whereIn('contrato_id',$composto)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
 
