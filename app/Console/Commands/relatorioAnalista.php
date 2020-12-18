@@ -43,8 +43,8 @@ class relatorioAnalista extends Command
      */
     public function handle()
     {
-        $from = date('2020-10-01');
-        $to = date('2020-10-31');
+        $from = date('2020-11-01');
+        $to = date('2020-11-30');
         $roleResult = Role::where('name', 'Analista pleno')->first();
         $resultUser = User::with('roles')->where('role_id', $roleResult->id)->get();
 
