@@ -175,8 +175,8 @@ class ClientesController extends Controller
 
     public function getRelatorioClientes(){
 
-        $from = date('2020-11-01');
-        $to = date('2020-11-30');
+        $from = date('2020-12-01');
+        $to = date('2020-12-31');
         $simples = ContratoMutuo::where('tipo_contrato','Simples')->pluck('id');
         $composto = ContratoMutuo::where('tipo_contrato','Composto')->pluck('id');
         $resultUser['valor_total_simples'] = \App\Models\RelatorioMensal::whereIn('contrato_id',$simples)->whereBetween('data_referencia', [$from, $to])->sum('comissao');
