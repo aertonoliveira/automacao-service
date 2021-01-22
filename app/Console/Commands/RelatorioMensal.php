@@ -42,7 +42,7 @@ class RelatorioMensal extends Command
     public function handle()
     {
         $from = date('2020-04-01');
-        $to = date('2020-11-30');
+        $to = date('2020-12-31');
         $result = ContratoMutuo::whereBetween('inicio_mes', [$from, $to])->get();
         $datetime =  Carbon::now('America/Sao_Paulo');
         $dataAtual = $datetime->format('Y-m-d H:i:s');
