@@ -98,7 +98,7 @@ class Helper extends Controller
     }
 
     static function retornaIntervaloDatas($mes){
-        $ano = date('Y');
+        $ano = '2020';//date('Y');
         $finalMes = Helper::retornaQuantidadeDias($mes,$ano);
         $inicio = date($ano.'-'.$mes.'-01');
         $fim = date($ano.'-'.$mes.'-'.$finalMes);
