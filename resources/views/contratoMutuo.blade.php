@@ -43,7 +43,7 @@
     <br><br>
     (A) - Aporte: R$ {{$contrato->valor}}
     <br><br>
-    (B) - Percentual de Referência para o rendimentos: {{$contrato->porcentagem}}%.
+    (B) - Percentual de Referência para o rendimentos de até: {{$contrato->porcentagem}}%.
     <br><br>
     (C) - Prazo Máximo para Resgate: {{\Carbon\Carbon::parse( $contrato->inicio_mes)->format('d/m/Y')}} / {{ \Carbon\Carbon::parse( $contrato->final_mes)->format('d/m/Y')  }} / {{ \Carbon\Carbon::parse( $contrato->final_mes)->format('Y')  }} . (Deverá ser de até sete anos contados da data de assinatura do contrato, conforme Lei Complementar n° 123/2006, art. 61-A, § 1°)
     A contratada disponibiliza a plataforma de pagamentos de benefícios, como conta digital de pontos e cartão pré-pago, sendo que toda e qualquer tarifa da plataforma ocorrerá por conta do Credor.
