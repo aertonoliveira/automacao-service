@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\MetaCliente;
-use App\User;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class criarMeta extends Command

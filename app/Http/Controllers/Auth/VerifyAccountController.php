@@ -8,13 +8,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\User;
+use App\Models\User;
 
 class VerifyAccountController extends Controller
 {
     /**
      * Login
-     * 
+     *
      * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
@@ -45,7 +45,7 @@ class VerifyAccountController extends Controller
             $user->update(['email_verified_at' => \Carbon\Carbon::now()]);
 
             return response()->json(['message' => 'Account has been verified.'], 201);
-            
+
         } catch (TokenExpiredException $e) {
 
             return response()->json(['error' => 'Session Expired.', 'status_code' => 401], 401);

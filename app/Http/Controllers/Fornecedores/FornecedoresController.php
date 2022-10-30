@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Fornecedores;
 
 use App\Http\Requests\Fornecedores\StoreFornecedorRequest;
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use App\Models\Fornecedor;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +38,7 @@ class FornecedoresController extends Controller
     }
 
     public function update(StoreFornecedorRequest $request,$id){
-        
+
         $input = $request->all();
 
         $fornecedor = $this->repository::find($id);
@@ -60,9 +60,9 @@ class FornecedoresController extends Controller
             $result = $fornecedor->delete();
             return response()->json([], 204);
         }
-        
+
         return response()->json(['error' => 'Fornecedor não encontrado'], 409);
 
-        
+
     }
 }

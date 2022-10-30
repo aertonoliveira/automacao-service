@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -110,11 +110,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function parent()
     {
-        return $this->belongsTo('App\User', 'user_parent_id');
+        return $this->belongsTo('App\Models\User', 'user_parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany('App\User', 'user_parent_id');
+        return $this->hasMany('App\Models\User', 'user_parent_id');
     }
 }

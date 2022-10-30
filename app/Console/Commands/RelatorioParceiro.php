@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\ContratoMutuo;
 use App\Models\MetaCliente;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use App\Utils\Helper;
 use Illuminate\Console\Command;
@@ -68,7 +68,7 @@ class RelatorioParceiro extends Command
                     MetaCliente::where('id', $resultMetaPleno['id'])->update(['mata_atingida' => $soma, 'valor_parceiro' => $valorPleno]);
 
                     $objConta = [
-                    'id' => $resultMetaPleno['id'],    
+                    'id' => $resultMetaPleno['id'],
                     'titulo' => 'Conta de Relatório Parceiro',
                     'valor' => $totalMes,
                     'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
@@ -89,7 +89,7 @@ class RelatorioParceiro extends Command
                     MetaCliente::where('id', $resultMetaPleno['id'])->update(['mata_atingida' => $soma, 'valor_parceiro' => $valorPleno]);
 
                     $objConta = [
-                        'id' => $resultMetaPleno['id'],    
+                        'id' => $resultMetaPleno['id'],
                         'titulo' => 'Conta de Relatório Parceiro',
                         'valor' => $totalMes,
                         'data_vencimento' => Carbon::now()->addDay(10)->toDateString(),
@@ -99,7 +99,7 @@ class RelatorioParceiro extends Command
 
                     $helper = new Helper();
                     $helper->registroContas($objConta);
-                    
+
                 }
             }
         }
