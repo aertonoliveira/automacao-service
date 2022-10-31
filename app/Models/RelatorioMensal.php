@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\User;
+use App\Models\User;
 use App\Utils\Helper;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,7 +26,7 @@ class RelatorioMensal extends Model
     ];
 
     public function user(){
-        return $this->belongsTo('App\User','user_id', 'id');
+        return $this->belongsTo('App\Models\User','user_id', 'id');
     }
 
     public function contrato(){

@@ -1,56 +1,32 @@
-version: '3'
-services: 
-  web:
-    restart: always
-    build: .
-    volumes: 
-      - ./:/var/www/
-    depends_on: 
-      - db
-    networks:
-      - postgres-network  
+version: "3"
 
-  db:
-    image: postgres:12.0-alpine
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: automacao
-      POSTGRES_HOST_AUTH_METHOD: trust
-    volumes: 
-      - "./.docker/dbdata:/var/lib/postgresql/data"
-    networks:
-      - postgres-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "alexia@dev.com.br"
-      PGADMIN_DEFAULT_PASSWORD: "123456"
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
-    volumes:
-      - "./.docker/pgadmin-data:/var/lib/pgadmin"
-    networks:
-      - postgres-network
-
+services:
   nginx:
-    build: ./.docker/nginx
-    restart: always
+    image: nginx:latest
+    container_name: cooperativa_nginx
     ports:
-      - "8000:80"
-    volumes: 
-      - ./:/var/www
-    depends_on: 
-      - web
-    networks:
-     - postgres-network
+      - 80:80
+    volumes:
+      - .:/usr/share/nginx/html:rw
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
 
-networks: 
-  postgres-network:
-    driver: bridge
+  php-fpm:
+    build: .docker/php-fpm
+    container_name: cooperativa_php
+    volumes:
+      - .:/usr/share/nginx/html:rw
+
+  postgres:
+    image: postgres:12.0-alpine
+    container_name: cooperativa_postgres
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

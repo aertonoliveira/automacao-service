@@ -11,7 +11,7 @@ use App\Models\DocumentosClientes;
 use App\Models\Role;
 use App\Models\SaldoConta;
 use App\Notifications\UserVerifyNotification;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Http\Request;

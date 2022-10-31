@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-use App\User;
+use App\Models\User;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

@@ -6,7 +6,7 @@ use App\Models\ContratoMutuo;
 use App\Models\MetaCliente;
 use App\Models\Role;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Utils\Helper;
 use Illuminate\Console\Command;
 
@@ -66,8 +66,8 @@ class relatorioAnalista extends Command
                     'valor_carteira' => $valorCarteira,
                     'porcentagem_valor_carteira' =>  $porcentagemCarteira
                 ]);
-                
-                
+
+
                 $objConta['id'] = $resultMeta->id;
                 $objConta['titulo'] = 'Conta de Relatório Analista';
                 $objConta['valor'] = $totalMes;
@@ -75,7 +75,7 @@ class relatorioAnalista extends Command
                 $objConta['tipo_registro'] = 1;
                 $objConta['tipo_conta'] = 1;
 
-              
+
                 $helper = new Helper();
                 $helper->registroContas($objConta);
 

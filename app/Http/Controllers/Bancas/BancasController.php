@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Bancas\StoreBancaRequest;
 use App\Http\Requests\Bancas\StoreBancaTradeRequest;
 use App\Models\Role;
-use App\User;
+use App\Models\User;
 use App\Banca;
 use App\BancaTrader;
 use Carbon\Carbon;
@@ -41,7 +41,7 @@ class BancasController extends Controller
             } else {
                 return response()->json(['error' => 'Favor enviar somente imagens'], 409);
             }
-            
+
 
             $resultCreate = $this->repository::create($new);
 
@@ -72,7 +72,7 @@ class BancasController extends Controller
         try {
 
             $userAuth = Auth::user();
-            
+
             $new = $request->all();
             $new['banca_id'] = $this->repository::where('user_id', $userAuth->id)->first()->id;
             $new['data_pagamento'] = Carbon::now();
@@ -84,7 +84,7 @@ class BancasController extends Controller
             } else {
                 return response()->json(['error' => 'Favor enviar somente imagens'], 409);
             }
-            
+
 
             $resultCreate = BancaTrader::create($new);
 

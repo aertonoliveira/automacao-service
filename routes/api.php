@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+Route::post('cadastro/cliente', 'ClientesController@create');
+
 Route::group(['namespace' => 'Auth'], function () {
 
     Route::post('auth/login', ['as' => 'login', 'uses' => 'AuthController@login']);
@@ -12,6 +14,8 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('auth/reset', 'ResetPasswordController@callResetPassword');
     // handle reset password form process
     Route::get('auth/verify', 'VerifyAccountController@verify');
+
+
 
 });
 

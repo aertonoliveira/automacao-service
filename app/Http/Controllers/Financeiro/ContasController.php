@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Financeiro;
 
 use App\Http\Requests\Financeiro\StoreContasRequest;
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use App\Models\FinanceiroConta;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +45,7 @@ class ContasController extends Controller
     }
 
     public function update(StoreContasRequest $request,$id){
-        
+
         $input = $request->all();
 
         $conta = $this->repository::find($id);
@@ -75,11 +75,11 @@ class ContasController extends Controller
             $result = $conta->delete();
             return response()->json([], 204);
         }
-        
+
         return response()->json(['error' => 'Conta não encontrada'], 409);
 
-        
+
     }
 
-    
+
 }
