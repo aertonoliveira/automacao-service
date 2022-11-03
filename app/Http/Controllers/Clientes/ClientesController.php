@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Clientes;
 
-use App\Http\Requests\Auth\RegisterRequest;
+
 use App\Http\Requests\Clientes\StoreCLienteRequest;
-use App\Http\Resources\User as UserResource;
+
 use App\Models\Arquivo;
 use App\Models\ContratoMutuo;
-use App\Models\DocumentosClientes;
 use App\Models\Role;
 use App\Models\SaldoConta;
 use App\Notifications\UserVerifyNotification;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +39,7 @@ class ClientesController extends Controller
             $user->password = bcrypt($request->password);
             $user->name = $request->name;
             $user->email = $request->email;
-            $user->user_parent_id = $userAuth->id;
+//            $user->user_parent_id = $userAuth->id;
             $user->rg = $request->rg;
             $user->data_emissao = $request->data_emissao;
             $user->orgao_emissor = $request->orgao_emissor;
@@ -59,18 +57,18 @@ class ClientesController extends Controller
             $user->cep = $request->cep;
             $user->telefone = $request->telefone;
             $user->celular = $request->celular;
-            $user->role_id = $request->role_id;
+            $user->role_id = 7;
 
             $user->save();
 
             DB::table('role_user')->insert([
                 'user_id' =>  $user->id,
-                'role_id' =>  $input['role_id']
+                'role_id' =>  $user->role_id
             ]);
             $saldo['user_id'] = $user->id;
             $saldo['valor'] = 0;
-            SaldoConta::create($saldo);
-            $user->notify(new UserVerifyNotification( $input['email'], $input['password']));
+//            SaldoConta::create($saldo);
+//            $user->notify(new UserVerifyNotification( $input['email'], $input['password']));
 
             return [
                 'status_code' => 200,
@@ -139,9 +137,18 @@ class ClientesController extends Controller
         $roleResult = Role::where('name',$tipo)->first();
         //dd($roleResult);
         $result = User::with('roles')->where('id', $userAuth->id)->get();
+
+
+
+
         if ($result[0]['roles'][0]['name'] === "Administrador" || $result[0]['roles'][0]['name'] === "Diretor"){
             $userResult = User::with('roles','parent','saldoConta')->where('role_id',$roleResult->id)->paginate(10);
-            return response()->json($userResult, 200);
+            if ($request->query()) {
+                return $this->repository->search($request->query());
+            } else {
+                return $this->repository->with('user')->paginate(10);
+            }
+
         }else{
             $userResult = User::with('roles','parent','saldoConta')->where(['role_id'=>$roleResult->id, 'user_parent_id'=>  $userAuth->id ])->paginate(10);
             return response()->json($userResult, 200);

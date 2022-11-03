@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utils\Helper;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,6 +33,18 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function search ($filter,$quantidadeItens = 15)
+    {
+        $relatorio = $this->with('roles','parent','saldoConta')->where(function ($query) use ($filter) {
+            if (isset($filter['cpf'])){
+                $query->where('cpf',$filter['cpf']);
+            }
+
+        })->paginate(10);
+
+        return $relatorio;
+    }
 
 
     /**
@@ -66,6 +79,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->belongsToMany(\App\Models\Role::class);
     }
+
+
 
     public function saldoConta()
     {
